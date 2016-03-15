@@ -88,7 +88,7 @@ public class Telefone {
      *
      * @return the numero telefone
      */
-    public String getTelefoneFixo() {
+    public String getTelefone() {
         return telefone;
     }
 
@@ -97,26 +97,8 @@ public class Telefone {
      *
      * @param telefoneFixo the new telefone fixo
      */
-    public void setTelefoneFixo(String telefoneFixo) {
-        this.telefone = telefoneFixo;
-    }
-
-    /**
-     * Gets the telefone celular.
-     *
-     * @return the telefone celular
-     */
-    public String getTelefoneCelular() {
-        return telefone;
-    }
-
-    /**
-     * Sets the telefone celular.
-     *
-     * @param telefoneCelular the new telefone celular
-     */
-    public void setTelefoneCelular(String telefoneCelular) {
-        this.telefone = telefoneCelular;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     // Equals, HashCode e toString

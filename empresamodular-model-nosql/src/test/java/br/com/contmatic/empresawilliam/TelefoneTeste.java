@@ -93,19 +93,19 @@ public class TelefoneTeste {
 
     @Test
     public void nao_deve_aceitar_telefoneFixo_nulo() {
-        fixoValido.setTelefoneFixo(null);
+        fixoValido.setTelefone(null);
         assertTrue(hasErrors(fixoValido, "O número de telefone não pode ser nulo."));
     }
 
     @Test
     public void nao_deve_aceitar_telefoneFixo_vazio() {
-        fixoValido.setTelefoneFixo("");
+        fixoValido.setTelefone("");
         assertTrue(hasErrors(fixoValido, "O número de telefone não pode ficar vazio."));
     }
 
     @Test
     public void nao_deve_aceitar_telefoneFixo_em_branco() {
-        fixoValido.setTelefoneFixo(" ");
+        fixoValido.setTelefone(" ");
         assertTrue(hasErrors(fixoValido, "O número de telefone não pode ficar vazio."));
     }
 
@@ -126,19 +126,19 @@ public class TelefoneTeste {
 
     @Test
     public void nao_deve_aceitar_telefoneCelular_nulo() {
-        celularValido.setTelefoneCelular(null);
+        celularValido.setTelefone(null);
         assertTrue(hasErrors(celularValido, "O número de telefone não pode ser nulo."));
     }
 
     @Test
     public void nao_deve_aceitar_telefoneCelular_vazio() {
-        celularValido.setTelefoneCelular("");
+        celularValido.setTelefone("");
         assertTrue(hasErrors(celularValido, "O número de telefone não pode ficar vazio."));
     }
 
     @Test
     public void nao_deve_aceitar_telefoneCelular_em_branco() {
-        celularValido.setTelefoneCelular(" ");
+        celularValido.setTelefone(" ");
         assertTrue(hasErrors(celularValido, "O número de telefone não pode ficar vazio."));
     }
 
