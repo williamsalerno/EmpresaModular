@@ -1,6 +1,5 @@
 package br.com.contmatic.empresawilliam;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -272,6 +271,7 @@ public class Empresa {
      * @param dataDeCriacao the new data de criacao
      */
     public void setDataDeCriacao(LocalDate dataDeCriacao) {
+        checkNotNull(dataDeCriacao, "A data de criação deve ser preenchida.");
         verificaSeDataDeCriacaoEAnterior(dataDeCriacao);
         verificaSeDataDeCriacaoEPosterior(dataDeCriacao);
         this.dataDeCriacao = dataDeCriacao;
@@ -292,6 +292,7 @@ public class Empresa {
      * @param dataDeAlteracao the new data de alteracao
      */
     public void setDataDeAlteracao(LocalDate dataDeAlteracao) {
+        checkNotNull(dataDeAlteracao, "A data de alteração deve ser preenchida.");
         verificaSeDataDeAlteracaoEAnteriorACriacao(dataDeAlteracao);
         this.dataDeAlteracao = dataDeAlteracao;
     }
@@ -329,7 +330,7 @@ public class Empresa {
      * @param dataDeCriacao the data de criacao
      */
     public void verificaSeDataDeCriacaoEAnterior(LocalDate dataDeCriacao) {
-        checkArgument(!dataDeCriacao.isBefore(LocalDate.now()), "Data de criação informada não pode ser anterior à data atual.");
+        checkState(!dataDeCriacao.isBefore(LocalDate.now()), "Data de criação informada não pode ser anterior à data atual.");
     }
 
     /**
@@ -338,7 +339,7 @@ public class Empresa {
      * @param dataDeCriacao the data de criacao
      */
     public void verificaSeDataDeCriacaoEPosterior(LocalDate dataDeCriacao) {
-        checkArgument(!dataDeCriacao.isAfter(LocalDate.now()), "Data de criação informada não pode ser posterior à data atual.");
+        checkState(!dataDeCriacao.isAfter(LocalDate.now()), "Data de criação informada não pode ser posterior à data atual.");
     }
 
     /**
@@ -383,10 +384,9 @@ public class Empresa {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, MULTI_LINE_STYLE).append("Razão social: ", razaoSocial).append("Proprietário: ", proprietario).append("CNPJ", cnpj).append("Endereço: ", (enderecos != null) ? enderecos : null)
-                .append("Telefone: ", (telefones != null) ? telefones : null).append("Email: ", email).append("Site: ", site)
-                .append("Data de criação: ", (converteDataDeCriacao(dataDeCriacao) != null) ? converteDataDeCriacao(dataDeCriacao) : null)
-                .append("Data de alteração: ", (converteDataDeAlteracao(dataDeAlteracao) != null) ? converteDataDeAlteracao(dataDeAlteracao) : null).build();
+        return new ToStringBuilder(this, MULTI_LINE_STYLE).append("Razão social: ", this.razaoSocial).append("Proprietário: ", this.proprietario).append("CNPJ", this.cnpj)
+                .append("Endereço: ", this.enderecos).append("Telefone: ", (this.telefones)).append("Email: ", this.email).append("Site: ", this.site).append("Data de criação: ", this.dataDeCriacao)
+                .append("Data de alteração: ", this.dataDeAlteracao).build();
     }
 
 }

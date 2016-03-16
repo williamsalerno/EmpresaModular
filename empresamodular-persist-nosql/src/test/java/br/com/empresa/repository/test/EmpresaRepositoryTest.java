@@ -9,7 +9,7 @@ import static br.com.empresa.repository.util.EmpresaDocument.toDocument;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.joda.time.LocalDate;
+import org.junit.Before;
 import org.junit.Test;
 
 import br.com.contmatic.empresawilliam.Empresa;
@@ -19,54 +19,70 @@ import br.com.empresa.repository.EmpresaRepository;
 
 public class EmpresaRepositoryTest {
 
-    @Test
-    public void deve_incluir_doc() {
-        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        
+    private Empresa empresa = new Empresa();
+    Set<Endereco> endereco = new HashSet<Endereco>();
+    Set<Telefone> telefone = new HashSet<Telefone>();
+
+    @Before
+    public void setUp() {
         Endereco endereco1 = new Endereco();
+        Endereco endereco2 = new Endereco();
+        Telefone telefone1 = new Telefone();
+        Telefone telefone2 = new Telefone();
+
         endereco1.setTipoLogradouro("Rua");
         endereco1.setNomeLogradouro("Exemplo");
         endereco1.setNumeroEndereco(100);
         endereco1.setCep("12345678");
         endereco1.setTipoEndereco(COMERCIAL);
-        
-        Endereco endereco2 = new Endereco();
+
         endereco2.setTipoLogradouro("Avenida");
         endereco2.setNomeLogradouro("Teste");
         endereco2.setNumeroEndereco(1000);
         endereco2.setCep("87654321");
         endereco2.setTipoEndereco(RESIDENCIAL);
-        
-        Set<Endereco> endereco = new HashSet<Endereco>();
-        endereco.add(endereco1);
-        endereco.add(endereco2);
-        
-        Telefone telefone1 = new Telefone();
+
+        this.endereco.add(endereco1);
+        this.endereco.add(endereco2);
+
         telefone1.setDdd(11);
         telefone1.setTelefone("12345678");
         telefone1.setTipoTelefone(FIXO);
-        
-        Telefone telefone2 = new Telefone();
+
         telefone2.setDdd(11);
         telefone2.setTelefone("123456789");
         telefone2.setTipoTelefone(CELULAR);
-        
-        Set<Telefone> telefone = new HashSet<Telefone>();
+
         telefone.add(telefone1);
         telefone.add(telefone2);
-        
-        Empresa empresa = new Empresa();
-        empresa.setCnpj("12345678911234");
-        empresa.setRazaoSocial("TimeTrial Factory");
-        empresa.setProprietario("William");
-        empresa.setEmail("timetrial.fac@gmail.com");
-        empresa.setSite("www.timetrialfac.com.br");
-        //empresa.setEnderecos(endereco);
-        empresa.setTelefones(telefone);
-//        empresa.setDataDeCriacao(LocalDate.now());
-//        empresa.setDataDeAlteracao(LocalDate.now().plusDays(20));
-        
-        repository.salvarEmpresa(toDocument(empresa));
+
+        this.empresa.setCnpj("12345678911234");
+        this.empresa.setRazaoSocial("Um Nome Qualquer");
+        this.empresa.setProprietario("Fulano");
+        this.empresa.setEmail("timetrial@gmail.com");
+        this.empresa.setSite("www.timetrialfac.com");
+        this.empresa.setEnderecos(endereco);
+        this.empresa.setTelefones(telefone);
+        // empresa.setDataDeCriacao(LocalDate.now());
+        // empresa.setDataDeAlteracao(LocalDate.now().plusDays(20));
+    }
+
+    @Test
+    public void deve_incluir_doc() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        repository.saveEmpresa(toDocument(this.empresa));
+    }
+
+    @Test
+    public void deve_atualizar_doc() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        repository.updateEmpresa(toDocument(this.empresa), "cnpj", "12345678911234", "43211987654321");
+    }
+
+    @Test
+    public void deve_atualizar_doc_multi_true() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        repository.updateEmpresas(toDocument(this.empresa), "site", "www.timetrialfac.com", "www.timetrialfac.com.br");
     }
 
 }

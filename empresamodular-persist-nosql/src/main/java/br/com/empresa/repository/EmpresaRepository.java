@@ -20,12 +20,34 @@ public class EmpresaRepository {
         this.db = db;
     }
 
-    public void salvarEmpresa(Document empresa) {
+    public void saveEmpresa(Document empresa) {
         try {
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
             collection.insertOne(empresa);
+        } finally {
+            mongoClient.close();
+        }
+    }
+
+    public void updateEmpresa(Document empresa, String campo, String valor, String novoValor) {
+        try {
+            this.mongoClient = new MongoClient(this.host, this.port);
+            MongoDatabase database = mongoClient.getDatabase(this.db);
+            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            collection.updateOne(new Document(campo, valor), new Document("$set", new Document(campo, novoValor)));
+        } finally {
+            mongoClient.close();
+        }
+    }
+    
+    public void updateEmpresas(Document empresa, String campo, String valorAtual, String novoValor) {
+        try {
+            this.mongoClient = new MongoClient(this.host, this.port);
+            MongoDatabase database = mongoClient.getDatabase(this.db);
+            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            collection.updateMany(new Document(campo, valorAtual), new Document("$set", new Document(campo, novoValor)));
         } finally {
             mongoClient.close();
         }

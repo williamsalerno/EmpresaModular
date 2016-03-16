@@ -301,14 +301,14 @@ public class EmpresaTeste {
 
     @Test
     public void nao_deve_aceitar_dataCriacao_posterior() {
-        thrown.expect(IllegalArgumentException.class);
+        thrown.expect(IllegalStateException.class);
         thrown.expectMessage("Data de criação informada não pode ser posterior à data atual.");
         empresa.setDataDeCriacao(LocalDate.now().plusDays(1));
     }
 
     @Test
     public void nao_deve_aceitar_dataCriacao_anterior() {
-        thrown.expect(IllegalArgumentException.class);
+        thrown.expect(IllegalStateException.class);
         thrown.expectMessage("Data de criação informada não pode ser anterior à data atual.");
         empresa.setDataDeCriacao(dataTesteOntem);
     }
@@ -334,7 +334,6 @@ public class EmpresaTeste {
     
     @Test
     public void deve_aceitar_empresa_nulo() {
-        thrown.expectMessage("A data de criação deve ser preenchida.");
         empresa = new Empresa();
         System.out.println(empresa);
     }
