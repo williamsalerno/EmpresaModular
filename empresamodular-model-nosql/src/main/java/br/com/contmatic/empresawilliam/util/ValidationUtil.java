@@ -62,5 +62,18 @@ public final class ValidationUtil {
         return false;
 
     }
+    
+    public static boolean hasErrors(Object obj) {
+        if (obj != null) {
+            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+            Validator validator = factory.getValidator();
+            Set<ConstraintViolation<Object>> errors = validator.validate(obj);
+            if(errors.size() > 0){
+                return true;
+            }
+        }
+        return false;
+
+    }
 
 }

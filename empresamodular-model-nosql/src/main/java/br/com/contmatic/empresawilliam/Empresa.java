@@ -131,24 +131,6 @@ public class Empresa {
     // getters e setters
 
     /**
-     * Obtém a razão social.
-     *
-     * @return the razao social
-     */
-    public String getRazaoSocial() {
-        return razaoSocial;
-    }
-
-    /**
-     * Determina um valor para a razão social e chama um método de validação.
-     *
-     * @param razaoSocial the new razao social
-     */
-    public void setRazaoSocial(String razaoSocial) {
-        this.razaoSocial = razaoSocial;
-    }
-
-    /**
      * Obtém o CNPJ.
      *
      * @return the cnpj
@@ -164,6 +146,24 @@ public class Empresa {
      */
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
+    }
+    
+    /**
+     * Obtém a razão social.
+     *
+     * @return the razao social
+     */
+    public String getRazaoSocial() {
+        return razaoSocial;
+    }
+
+    /**
+     * Determina um valor para a razão social e chama um método de validação.
+     *
+     * @param razaoSocial the new razao social
+     */
+    public void setRazaoSocial(String razaoSocial) {
+        this.razaoSocial = razaoSocial;
     }
 
     /**

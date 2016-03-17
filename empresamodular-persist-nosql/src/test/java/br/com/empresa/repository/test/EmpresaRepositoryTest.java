@@ -9,6 +9,7 @@ import static br.com.empresa.repository.util.EmpresaDocument.toDocument;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +39,7 @@ public class EmpresaRepositoryTest {
 
         endereco2.setTipoLogradouro("Avenida");
         endereco2.setNomeLogradouro("Teste");
-        endereco2.setNumeroEndereco(1000);
+        endereco2.setNumeroEndereco(999);
         endereco2.setCep("87654321");
         endereco2.setTipoEndereco(RESIDENCIAL);
 
@@ -57,7 +58,7 @@ public class EmpresaRepositoryTest {
         telefone.add(telefone2);
 
         this.empresa.setCnpj("12345678911234");
-        this.empresa.setRazaoSocial("Um Nome Qualquer");
+        this.empresa.setRazaoSocial("Exemplo");
         this.empresa.setProprietario("Fulano");
         this.empresa.setEmail("timetrial@gmail.com");
         this.empresa.setSite("www.timetrialfac.com");
@@ -70,19 +71,24 @@ public class EmpresaRepositoryTest {
     @Test
     public void deve_incluir_doc() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.saveEmpresa(toDocument(this.empresa));
+        repository.saveEmpresa(this.empresa);
     }
 
     @Test
     public void deve_atualizar_doc() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.updateEmpresa(toDocument(this.empresa), "cnpj", "12345678911234", "43211987654321");
+        repository.updateEmpresa(this.empresa);
     }
 
     @Test
     public void deve_atualizar_doc_multi_true() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
         repository.updateEmpresas(toDocument(this.empresa), "site", "www.timetrialfac.com", "www.timetrialfac.com.br");
+    }
+
+    @Test
+    public void deve_remover_doc() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
     }
 
 }

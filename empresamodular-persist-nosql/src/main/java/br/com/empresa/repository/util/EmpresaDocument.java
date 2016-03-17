@@ -11,8 +11,8 @@ public final class EmpresaDocument {
 
     public static Document toDocument(Empresa empresa){
         if(empresa != null){
-        Document empresaDoc = new Document("razaoSocial", empresa.getRazaoSocial())
-                .append("cnpj", empresa.getCnpj())
+        Document empresaDoc = new Document("cnpj", empresa.getCnpj())
+                .append("razaoSocial", empresa.getRazaoSocial())
                 .append("proprietario", empresa.getProprietario())
                 .append("email", empresa.getEmail())
                 .append("site", empresa.getSite())
