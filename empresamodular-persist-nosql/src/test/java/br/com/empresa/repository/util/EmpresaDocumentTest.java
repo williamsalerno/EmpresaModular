@@ -4,13 +4,11 @@ import static br.com.contmatic.empresawilliam.EnderecoType.COMERCIAL;
 import static br.com.contmatic.empresawilliam.EnderecoType.RESIDENCIAL;
 import static br.com.contmatic.empresawilliam.TelefoneType.CELULAR;
 import static br.com.contmatic.empresawilliam.TelefoneType.FIXO;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.bson.Document;
@@ -69,19 +67,47 @@ public class EmpresaDocumentTest {
         empresa.setTelefones(telefones);
 
         Document empresaDoc = EmpresaDocument.toDocument(empresa);
-        List<Document> listaEnderecos = EnderecoDocument.toDocument(enderecos);
+        @SuppressWarnings("unchecked")
+        List<Document> enderecoDoc = (List<Document>) empresaDoc.get("enderecos");
 
+        for(Document document : enderecoDoc) {
+            if (document.get("tipoLogradouro").equals(endereco1.getTipoLogradouro())) {
+                assertEquals(document.get("tipoLogradouro"), endereco1.getTipoLogradouro());
+            }
+            if (document.get("tipoLogradouro").equals(endereco2.getTipoLogradouro())) {
+                assertEquals(document.get("tipoLogradouro"), endereco2.getTipoLogradouro());
+            }
+            if (document.get("nomeLogradouro").equals(endereco1.getNomeLogradouro())) {
+                assertEquals(document.get("nomeLogradouro"), endereco1.getNomeLogradouro());
+            }
+            if (document.get("nomeLogradouro").equals(endereco2.getNomeLogradouro())) {
+                assertEquals(document.get("nomeLogradouro"), endereco2.getNomeLogradouro());
+            }
+            if (document.get("numeroEndereco").equals(endereco1.getNumeroEndereco())) {
+                assertEquals(document.get("numeroEndereco"), endereco1.getNumeroEndereco());
+            }
+            if (document.get("numeroEndereco").equals(endereco2.getNumeroEndereco())) {
+                assertEquals(document.get("numeroEndereco"), endereco2.getNumeroEndereco());
+            }
+            if (document.get("cep").equals(endereco1.getCep())) {
+                assertEquals(document.get("cep"), endereco1.getCep());
+            }
+            if (document.get("cep").equals(endereco2.getCep())) {
+                assertEquals(document.get("cep"), endereco2.getCep());
+            }
+            if (document.get("tipoEndereco").equals(endereco1.getTipoEndereco())) {
+                assertEquals(document.get("tipoEndereco"), endereco1.getTipoEndereco());
+            }
+            if (document.get("tipoEndereco").equals(endereco2.getTipoEndereco())) {
+                assertEquals(document.get("tipoEndereco"), endereco2.getTipoEndereco());
+            }
+
+        }
         assertEquals(empresa.getCnpj(), empresaDoc.get("cnpj"));
         assertEquals(empresa.getRazaoSocial(), empresaDoc.get("razaoSocial"));
         assertEquals(empresa.getProprietario(), empresaDoc.get("proprietario"));
         assertEquals(empresa.getEmail(), empresaDoc.get("email"));
         assertEquals(empresa.getSite(), empresaDoc.get("site"));
-
-        List<String> lista = new ArrayList<String>();
-
-        if (empresaDoc.get("enderecos").equals(listaEnderecos)) {
-
-        }
     }
 
     @Test

@@ -77,7 +77,7 @@ public class Empresa {
     @NotNull(message = "A razão social deve ser preenchida.")
     @NotEmpty(message = "A razão social não pode ficar vazia.")
     @NotBlank(message = "A razão social não pode ficar vazia.")
-    @Pattern(regexp = "[a-zA-Z0-9]", message = "A razão social só pode conter caracteres alfanuméricos.")
+    @Pattern(regexp = "[a-zA-Zá-úÁ-Ú0-9]", message = "A razão social só pode conter caracteres alfanuméricos.")
     @Length(min = TAMANHO_MINIMO_RAZAOSOCIAL, max = TAMANHO_MAXIMO_RAZAOSOCIAL, message = "A razão social deve conter entre {min} e {max} caracteres.")
     private String razaoSocial;
 
@@ -85,7 +85,7 @@ public class Empresa {
     @NotNull(message = "O nome de proprietário deve ser preenchido.")
     @NotEmpty(message = "O nome de proprietário não pode ficar vazio.")
     @NotBlank(message = "O nome de proprietário não pode ficar vazio.")
-    @Pattern(regexp = "[a-zA-Z]", message = "O nome de proprietário só pode conter letras.")
+    @Pattern(regexp = "[a-zA-Zá-úÁ-Ú]", message = "O nome de proprietário só pode conter letras.")
     @Length(min = TAMANHO_MINIMO_PROPRIETARIO, max = TAMANHO_MAXIMO_PROPRIETARIO, message = "O nome de proprietário deve conter entre {min} e {max} caracteres.")
     private String proprietario;
 
@@ -147,7 +147,7 @@ public class Empresa {
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
-    
+
     /**
      * Obtém a razão social.
      *

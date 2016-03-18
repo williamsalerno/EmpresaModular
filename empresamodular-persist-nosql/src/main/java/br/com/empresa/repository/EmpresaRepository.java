@@ -1,14 +1,14 @@
 package br.com.empresa.repository;
 
+import static br.com.empresa.repository.util.EmpresaDocument.toDocumentFilter;
+
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import br.com.contmatic.empresawilliam.Empresa;
-import br.com.contmatic.empresawilliam.util.ValidationUtil;
 import br.com.empresa.repository.util.EmpresaDocument;
 
 public class EmpresaRepository {
@@ -39,9 +39,9 @@ public class EmpresaRepository {
 
     public void updateEmpresa(Empresa empresa) {
         try {
-//            if (ValidationUtil.hasErrors(empresa)) {
-//                throw new Exception("Foi encontrado erro em Empresa.");
-//            }
+            // if (ValidationUtil.hasErrors(empresa)) {
+            // throw new Exception("Foi encontrado erro em Empresa.");
+            // }
             Document empresaDoc = EmpresaDocument.toDocument(empresa);
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
@@ -52,23 +52,36 @@ public class EmpresaRepository {
         }
     }
 
-    public void updateEmpresas(Document empresa, String campo, String valorAtual, String novoValor) {
+    public void updateEmpresas(Empresa empresaFiltro, Empresa empresa) {
         try {
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
-            collection.updateMany(new Document(campo, valorAtual), new Document("$set", new Document(campo, novoValor)));
+            collection.updateMany(toDocumentFilter(empresaFiltro), new Document("$set", toDocumentFilter(empresa)));
         } finally {
             mongoClient.close();
         }
     }
 
-    public void removeEmpresas(Document empresa, String campo, String valorAtual, String novoValor) {
+    public void removeEmpresa(Empresa empresa) {
         try {
+            Document empresaDoc = EmpresaDocument.toDocument(empresa);
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
-            collection.updateMany(new Document(campo, valorAtual), new Document("$set", new Document(campo, novoValor)));
+            collection.deleteOne(empresaDoc);
+        } finally {
+            mongoClient.close();
+        }
+    }
+
+    public void removeEmpresas(Empresa empresa) {
+        try {
+            Document empresaDoc = EmpresaDocument.toDocument(empresa);
+            this.mongoClient = new MongoClient(this.host, this.port);
+            MongoDatabase database = mongoClient.getDatabase(this.db);
+            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            collection.deleteMany(empresaDoc);
         } finally {
             mongoClient.close();
         }

@@ -4,12 +4,10 @@ import static br.com.contmatic.empresawilliam.EnderecoType.COMERCIAL;
 import static br.com.contmatic.empresawilliam.EnderecoType.RESIDENCIAL;
 import static br.com.contmatic.empresawilliam.TelefoneType.CELULAR;
 import static br.com.contmatic.empresawilliam.TelefoneType.FIXO;
-import static br.com.empresa.repository.util.EmpresaDocument.toDocument;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,6 +19,7 @@ import br.com.empresa.repository.EmpresaRepository;
 public class EmpresaRepositoryTest {
 
     private Empresa empresa = new Empresa();
+    private Empresa empresaUpdate = new Empresa();
     Set<Endereco> endereco = new HashSet<Endereco>();
     Set<Telefone> telefone = new HashSet<Telefone>();
 
@@ -57,38 +56,53 @@ public class EmpresaRepositoryTest {
         telefone.add(telefone1);
         telefone.add(telefone2);
 
-        this.empresa.setCnpj("12345678911234");
-        this.empresa.setRazaoSocial("Exemplo");
-        this.empresa.setProprietario("Fulano");
-        this.empresa.setEmail("timetrial@gmail.com");
-        this.empresa.setSite("www.timetrialfac.com");
+        this.empresa.setCnpj("12345678911231");
+        this.empresa.setRazaoSocial("exemplo");
+        this.empresa.setProprietario("exemplo");
+        this.empresa.setEmail("exemplo@gmail.com");
+        this.empresa.setSite("www.exemplo.com");
         this.empresa.setEnderecos(endereco);
         this.empresa.setTelefones(telefone);
+
+        this.empresaUpdate.setCnpj("12345678911234");
+        this.empresaUpdate.setRazaoSocial("TESTE");
+        this.empresaUpdate.setProprietario("TESTE");
+        this.empresaUpdate.setEmail("teste@gmail.com");
+        this.empresaUpdate.setSite("www.teste.com");
+        this.empresaUpdate.setEnderecos(endereco);
+        this.empresaUpdate.setTelefones(telefone);
         // empresa.setDataDeCriacao(LocalDate.now());
         // empresa.setDataDeAlteracao(LocalDate.now().plusDays(20));
     }
 
     @Test
-    public void deve_incluir_doc() {
+    public void deve_incluir_empresa() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
         repository.saveEmpresa(this.empresa);
     }
 
     @Test
-    public void deve_atualizar_doc() {
+    public void deve_atualizar_empresa() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
         repository.updateEmpresa(this.empresa);
     }
 
     @Test
-    public void deve_atualizar_doc_multi_true() {
+    public void deve_atualizar_empresas() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.updateEmpresas(toDocument(this.empresa), "site", "www.timetrialfac.com", "www.timetrialfac.com.br");
+        repository.updateEmpresas(this.empresa, this.empresaUpdate);
     }
 
     @Test
-    public void deve_remover_doc() {
+    public void deve_remover_empresa() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        repository.removeEmpresa(this.empresa);
+    }
+
+    @Test
+    public void deve_remover_empresas() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        repository.removeEmpresa(this.empresa);
     }
 
 }
