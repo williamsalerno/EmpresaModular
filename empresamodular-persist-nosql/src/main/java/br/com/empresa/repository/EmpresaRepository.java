@@ -10,6 +10,7 @@ import com.mongodb.client.MongoDatabase;
 
 import br.com.contmatic.empresawilliam.Empresa;
 import br.com.empresa.repository.util.EmpresaDocument;
+import br.com.empresa.repository.util.MongoClientDate;
 
 public class EmpresaRepository {
 
@@ -28,7 +29,7 @@ public class EmpresaRepository {
     public void saveEmpresa(Empresa empresa) {
         try {
             Document empresaDoc = EmpresaDocument.toDocument(empresa);
-            this.mongoClient = new MongoClient(this.host, this.port);
+            this.mongoClient = new MongoClient(this.host + ":" + this.port, MongoClientDate.codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
             collection.insertOne(empresaDoc);
@@ -37,16 +38,15 @@ public class EmpresaRepository {
         }
     }
 
-    public void updateEmpresa(Empresa empresa) {
+    public void updateEmpresa(Empresa empresa, Empresa empresaFiltro) {
         try {
             // if (ValidationUtil.hasErrors(empresa)) {
             // throw new Exception("Foi encontrado erro em Empresa.");
             // }
-            Document empresaDoc = EmpresaDocument.toDocument(empresa);
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
-            collection.updateOne(new Document("cnpj", empresa.getCnpj()), new Document("$set", empresaDoc));
+            collection.updateOne(toDocumentFilter(empresaFiltro), new Document("$set", toDocumentFilter(empresa)));
         } finally {
             mongoClient.close();
         }
@@ -63,25 +63,23 @@ public class EmpresaRepository {
         }
     }
 
-    public void removeEmpresa(Empresa empresa) {
+    public void removeEmpresa(Empresa empresaFiltro) {
         try {
-            Document empresaDoc = EmpresaDocument.toDocument(empresa);
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
-            collection.deleteOne(empresaDoc);
+            collection.deleteOne(new Document("cnpj", empresaFiltro.getCnpj()));
         } finally {
             mongoClient.close();
         }
     }
 
-    public void removeEmpresas(Empresa empresa) {
+    public void removeEmpresas(Empresa empresaFiltro) {
         try {
-            Document empresaDoc = EmpresaDocument.toDocument(empresa);
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
-            collection.deleteMany(empresaDoc);
+            collection.deleteMany(new Document("cnpj", empresaFiltro.getCnpj()));
         } finally {
             mongoClient.close();
         }

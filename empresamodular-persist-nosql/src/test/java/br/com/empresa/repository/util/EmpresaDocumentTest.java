@@ -31,7 +31,7 @@ public class EmpresaDocumentTest {
         Telefone telefone1 = new Telefone();
         Telefone telefone2 = new Telefone();
 
-        this.empresa.setCnpj("12345678911234");
+        this.empresa.setCnpj("12345678911231");
         this.empresa.setRazaoSocial("Um Nome Qualquer");
         this.empresa.setProprietario("Fulano");
         this.empresa.setEmail("timetrial@gmail.com");

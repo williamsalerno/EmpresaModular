@@ -8,6 +8,7 @@ import static br.com.contmatic.empresawilliam.TelefoneType.FIXO;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -64,15 +65,15 @@ public class EmpresaRepositoryTest {
         this.empresa.setEnderecos(endereco);
         this.empresa.setTelefones(telefone);
 
-        this.empresaUpdate.setCnpj("12345678911234");
+        this.empresaUpdate.setCnpj("12345678900000");
         this.empresaUpdate.setRazaoSocial("TESTE");
         this.empresaUpdate.setProprietario("TESTE");
         this.empresaUpdate.setEmail("teste@gmail.com");
         this.empresaUpdate.setSite("www.teste.com");
         this.empresaUpdate.setEnderecos(endereco);
         this.empresaUpdate.setTelefones(telefone);
-        // empresa.setDataDeCriacao(LocalDate.now());
-        // empresa.setDataDeAlteracao(LocalDate.now().plusDays(20));
+        this.empresa.setDataDeCriacao(LocalDate.now());
+        this.empresa.setDataDeAlteracao(LocalDate.now().plusDays(20));
     }
 
     @Test
@@ -84,7 +85,7 @@ public class EmpresaRepositoryTest {
     @Test
     public void deve_atualizar_empresa() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.updateEmpresa(this.empresa);
+        repository.updateEmpresa(this.empresa, this.empresaUpdate);
     }
 
     @Test
@@ -102,7 +103,7 @@ public class EmpresaRepositoryTest {
     @Test
     public void deve_remover_empresas() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.removeEmpresa(this.empresa);
+        repository.removeEmpresas(this.empresa);
     }
 
 }
