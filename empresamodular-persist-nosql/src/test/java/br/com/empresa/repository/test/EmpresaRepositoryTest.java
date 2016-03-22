@@ -57,23 +57,24 @@ public class EmpresaRepositoryTest {
         telefone.add(telefone1);
         telefone.add(telefone2);
 
-        this.empresa.setCnpj("12345678911231");
+        this.empresa.setCnpj("68328285000128");
         this.empresa.setRazaoSocial("exemplo");
         this.empresa.setProprietario("exemplo");
         this.empresa.setEmail("exemplo@gmail.com");
-        this.empresa.setSite("www.exemplo.com");
+        this.empresa.setSite("exemplo.com.br");
         this.empresa.setEnderecos(endereco);
         this.empresa.setTelefones(telefone);
 
-        this.empresaUpdate.setCnpj("12345678900000");
-        this.empresaUpdate.setRazaoSocial("TESTE");
+        this.empresaUpdate.setCnpj("68328285000128");
+        this.empresaUpdate.setRazaoSocial("TESTE2");
         this.empresaUpdate.setProprietario("TESTE");
         this.empresaUpdate.setEmail("teste@gmail.com");
-        this.empresaUpdate.setSite("www.teste.com");
+        this.empresaUpdate.setSite("teste.com.br");
         this.empresaUpdate.setEnderecos(endereco);
         this.empresaUpdate.setTelefones(telefone);
         this.empresa.setDataDeCriacao(LocalDate.now());
-        this.empresa.setDataDeAlteracao(LocalDate.now().plusDays(20));
+        this.empresaUpdate.setDataDeCriacao(empresa.getDataDeCriacao());
+        this.empresaUpdate.setDataDeAlteracao(LocalDate.now().plusDays(20));
     }
 
     @Test

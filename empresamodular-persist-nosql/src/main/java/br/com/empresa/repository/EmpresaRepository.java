@@ -1,5 +1,7 @@
 package br.com.empresa.repository;
 
+import static br.com.contmatic.empresawilliam.util.ValidationUtil.hasErrors;
+import static br.com.empresa.repository.util.EmpresaDocument.toDocument;
 import static br.com.empresa.repository.util.EmpresaDocument.toDocumentFilter;
 
 import org.bson.Document;
@@ -9,7 +11,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import br.com.contmatic.empresawilliam.Empresa;
-import br.com.empresa.repository.util.EmpresaDocument;
+import br.com.contmatic.empresawilliam.util.ValidationUtil;
 import br.com.empresa.repository.util.MongoClientDate;
 
 public class EmpresaRepository {
@@ -28,25 +30,31 @@ public class EmpresaRepository {
 
     public void saveEmpresa(Empresa empresa) {
         try {
-            Document empresaDoc = EmpresaDocument.toDocument(empresa);
             this.mongoClient = new MongoClient(this.host + ":" + this.port, MongoClientDate.codecDate());
+            if (hasErrors(empresa)) {
+                throw new Exception("Foi encontrado erro em Empresa.");
+            }
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
-            collection.insertOne(empresaDoc);
+            collection.insertOne(toDocument(empresa));
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             mongoClient.close();
         }
     }
 
-    public void updateEmpresa(Empresa empresa, Empresa empresaFiltro) {
+    public void updateEmpresa(Empresa empresaFiltro, Empresa empresa) {
         try {
-            // if (ValidationUtil.hasErrors(empresa)) {
-            // throw new Exception("Foi encontrado erro em Empresa.");
-            // }
-            this.mongoClient = new MongoClient(this.host, this.port);
+            if (ValidationUtil.hasErrors(empresa)) {
+                throw new Exception("Foi encontrado erro em Empresa.");
+            }
+            this.mongoClient = new MongoClient(this.host + ":" + this.port, MongoClientDate.codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
             collection.updateOne(toDocumentFilter(empresaFiltro), new Document("$set", toDocumentFilter(empresa)));
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             mongoClient.close();
         }
@@ -54,10 +62,15 @@ public class EmpresaRepository {
 
     public void updateEmpresas(Empresa empresaFiltro, Empresa empresa) {
         try {
-            this.mongoClient = new MongoClient(this.host, this.port);
+            if (ValidationUtil.hasErrors(empresa)) {
+                throw new Exception("Foi encontrado erro em Empresa.");
+            }
+            this.mongoClient = new MongoClient(this.host + ":" + this.port, MongoClientDate.codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
             collection.updateMany(toDocumentFilter(empresaFiltro), new Document("$set", toDocumentFilter(empresa)));
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             mongoClient.close();
         }

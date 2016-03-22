@@ -13,7 +13,10 @@ public final class EmpresaDocument {
     }
 
     public static Date converteParaDate(LocalDate localDate) {
-        return Date.from(localDate.toDate().toInstant());
+        if (localDate != null) {
+            return Date.from(localDate.toDate().toInstant());
+        }
+        return null;
     }
 
     public static Document toDocument(Empresa empresa) {
@@ -54,12 +57,16 @@ public final class EmpresaDocument {
         if (empresa.getTelefones() != null) {
             empresaDoc.append("telefones", TelefoneDocument.toDocument(empresa.getTelefones()));
         }
-        // if (empresa.getDataDeCriacao() != null) {
-        // empresaDoc.append("dataDeCriacao", empresa.getDataDeCriacao());
-        // }
-        // if (empresa.getDataDeAlteracao() != null) {
-        // empresaDoc.append("dataDeAlteracao", empresa.getDataDeAlteracao());
-        // }
+        if (empresa.getDataDeCriacao() != null) {
+            Date dataCriacao = converteParaDate(empresa.getDataDeCriacao());
+            empresaDoc.append("dataDeCriacao", dataCriacao);
+            Date dataAlteracao = converteParaDate(empresa.getDataDeAlteracao());
+            empresaDoc.append("dataDeAlteracao", dataAlteracao);
+        }
+        if (empresa.getDataDeAlteracao() != null) {
+            Date dataAlteracao = converteParaDate(empresa.getDataDeAlteracao());
+            empresaDoc.append("dataDeAlteracao", dataAlteracao);
+        }
         return empresaDoc;
     }
 }

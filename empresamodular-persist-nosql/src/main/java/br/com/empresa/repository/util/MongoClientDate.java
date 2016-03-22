@@ -9,6 +9,7 @@ import org.bson.codecs.BsonTypeClassMap;
 import org.bson.codecs.DocumentCodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
+import org.joda.time.LocalDate;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
@@ -28,5 +29,16 @@ public class MongoClientDate {
         MongoClientOptions option = MongoClientOptions.builder().codecRegistry(cr).build();
         return option;
     }
+
+    // public static MongoClientOptions codecLocalDate() {
+    // Map<BsonType, Class<?>> replacements = new HashMap<BsonType, Class<?>>();
+    // replacements.put(BsonType.DATE_TIME, LocalDate.class);
+    // BsonTypeClassMap bsonTypeClassMap = new BsonTypeClassMap(replacements);
+    // DocumentCodecProvider documentCodecProvider = new DocumentCodecProvider(bsonTypeClassMap);
+    // CodecRegistry cr = CodecRegistries.fromRegistries(CodecRegistries.fromCodecs(new LocalDateCodec()), CodecRegistries.fromProviders(documentCodecProvider),
+    // MongoClient.getDefaultCodecRegistry());
+    // MongoClientOptions option = MongoClientOptions.builder().codecRegistry(cr).build();
+    // return option;
+    // }
 
 }
