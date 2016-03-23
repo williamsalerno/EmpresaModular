@@ -64,6 +64,7 @@ public class EmpresaRepositoryTest {
         this.empresa.setSite("exemplo.com.br");
         this.empresa.setEnderecos(endereco);
         this.empresa.setTelefones(telefone);
+        this.empresa.setDataDeCriacao(LocalDate.now());
 
         this.empresaUpdate.setCnpj("68328285000128");
         this.empresaUpdate.setRazaoSocial("TESTE2");
@@ -72,7 +73,6 @@ public class EmpresaRepositoryTest {
         this.empresaUpdate.setSite("teste.com.br");
         this.empresaUpdate.setEnderecos(endereco);
         this.empresaUpdate.setTelefones(telefone);
-        this.empresa.setDataDeCriacao(LocalDate.now());
         this.empresaUpdate.setDataDeCriacao(empresa.getDataDeCriacao());
         this.empresaUpdate.setDataDeAlteracao(LocalDate.now().plusDays(20));
     }
@@ -105,6 +105,18 @@ public class EmpresaRepositoryTest {
     public void deve_remover_empresas() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
         repository.removeEmpresas(this.empresa);
+    }
+
+    @Test
+    public void deve_buscar_todos_os_documentos_da_empresa() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        repository.buscaEmpresa(this.empresa);
+    }
+
+    @Test
+    public void deve_buscar_empresa_por_cnpj() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        repository.buscaEmpresaPorCnpj(empresa.getCnpj());
     }
 
 }
