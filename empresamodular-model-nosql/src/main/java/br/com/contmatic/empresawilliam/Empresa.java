@@ -127,6 +127,21 @@ public class Empresa {
     @Future(message = "A data de alteração deve ser posterior à data de criação.")
     private LocalDate dataDeAlteracao;
 
+    @Pattern(regexp = "\\w{1,8}", message = "Existem Apelidos de Empresas contendo caracteres não permitidos pelo sistema operacional")
+    String apelido;
+
+    // tarefa----------------------------------------------------------------------------------------------------------------------------------
+    public String getApelido() {
+        return apelido;
+    }
+
+    public void setApelido(String apelido) {
+        this.apelido = apelido;
+    }
+    // tarefa----------------------------------------------------------------------------------------------------------------------------------
+
+    private boolean pesquisa = false;
+
     // getters e setters
 
     /**
@@ -296,6 +311,14 @@ public class Empresa {
         this.dataDeAlteracao = dataDeAlteracao;
     }
 
+    public void isPesquisa() {
+        this.pesquisa = true;
+    }
+
+    public void isPesquisaOff() {
+        this.pesquisa = false;
+    }
+
     // Formatação das datas
 
     /**
@@ -330,7 +353,8 @@ public class Empresa {
      * @param dataDeCriacao the data de criacao
      */
     public void verificaSeDataDeCriacaoEAnterior(LocalDate dataDeCriacao) {
-        checkState(!dataDeCriacao.isBefore(LocalDate.now()), "Data de criação informada não pode ser anterior à data atual.");
+        if (pesquisa == false)
+            checkState(!dataDeCriacao.isBefore(LocalDate.now()), "Data de criação informada não pode ser anterior à data atual.");
     }
 
     /**

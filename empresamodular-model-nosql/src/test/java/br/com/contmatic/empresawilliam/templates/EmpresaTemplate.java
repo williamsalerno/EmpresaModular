@@ -16,7 +16,9 @@ import br.com.six2six.fixturefactory.loader.TemplateLoader;
  */
 public class EmpresaTemplate implements TemplateLoader {
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see br.com.six2six.fixturefactory.loader.TemplateLoader#load()
      */
     @Override
@@ -46,5 +48,11 @@ public class EmpresaTemplate implements TemplateLoader {
                 add("dataDeAlteracao", random(LocalDate.now()));
             }
         });
+        Fixture.of(Empresa.class).addTemplate("tarefa", new Rule() {
+            {
+                add("apelido", random("<", ">", ":", "?", "/", "|"));
+            }
+        });
     }
+
 }

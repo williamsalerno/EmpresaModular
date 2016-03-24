@@ -29,17 +29,19 @@ public class EmpresaObject {
             return null;
         } else {
             Empresa empresa = new Empresa();
-            empresa.setCnpj(document.getString("cnpj"));
+            empresa.setCnpj(document.getString("_id"));
             empresa.setProprietario(document.getString("proprietario"));
             empresa.setRazaoSocial(document.getString("razaoSocial"));
             empresa.setEmail(document.getString("email"));
             empresa.setSite(document.getString("site"));
             empresa.setTelefones(TelefoneAssembler.toTelefone((List<Document>) document.get("telefones")));
             empresa.setEnderecos(EnderecoAssembler.toEndereco((List<Document>) document.get("enderecos")));
+            empresa.isPesquisa();
             empresa.setDataDeCriacao(converteParaLocalDate(document, "dataCriacao"));
             if (document.get("dataAlteracao") != null) {
                 empresa.setDataDeAlteracao(converteParaLocalDate(document, "dataAlteracao"));
             }
+            empresa.isPesquisaOff();
             return empresa;
         }
 

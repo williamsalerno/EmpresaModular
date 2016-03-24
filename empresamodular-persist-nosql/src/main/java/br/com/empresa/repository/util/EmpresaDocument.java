@@ -23,7 +23,7 @@ public final class EmpresaDocument {
         if (empresa != null) {
             Date dataCriacao = converteParaDate(empresa.getDataDeCriacao());
             Date dataAlteracao = converteParaDate(empresa.getDataDeAlteracao());
-            Document empresaDoc = new Document("cnpj", empresa.getCnpj()).append("razaoSocial", empresa.getRazaoSocial()).append("proprietario", empresa.getProprietario())
+            Document empresaDoc = new Document("_id", empresa.getCnpj()).append("razaoSocial", empresa.getRazaoSocial()).append("proprietario", empresa.getProprietario())
                     .append("email", empresa.getEmail()).append("site", empresa.getSite()).append("enderecos", EnderecoAssembler.toDocument(empresa.getEnderecos()))
                     .append("telefones", TelefoneAssembler.toDocument(empresa.getTelefones())).append("dataCriacao", dataCriacao).append("dataAlteracao", dataAlteracao);
             return empresaDoc;
@@ -37,7 +37,7 @@ public final class EmpresaDocument {
         }
         Document empresaDoc = new Document();
         if (empresa.getCnpj() != null) {
-            empresaDoc.append("cnpj", empresa.getCnpj());
+            empresaDoc.append("_id", empresa.getCnpj());
         }
         if (empresa.getProprietario() != null) {
             empresaDoc.append("proprietario", empresa.getProprietario());
@@ -70,7 +70,7 @@ public final class EmpresaDocument {
         }
         Document empresaDoc = new Document();
         if (empresa.getCnpj() != null) {
-            empresaDoc.append("cnpj", empresa.getCnpj());
+            empresaDoc.append("_id", empresa.getCnpj());
         } else {
             if (empresa.getProprietario() != null) {
                 empresaDoc.append("proprietario", empresa.getProprietario());

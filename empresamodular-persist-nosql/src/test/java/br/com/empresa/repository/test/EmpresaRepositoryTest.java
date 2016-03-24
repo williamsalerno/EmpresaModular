@@ -5,7 +5,9 @@ import static br.com.contmatic.empresawilliam.EnderecoType.RESIDENCIAL;
 import static br.com.contmatic.empresawilliam.TelefoneType.CELULAR;
 import static br.com.contmatic.empresawilliam.TelefoneType.FIXO;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.joda.time.LocalDate;
@@ -23,6 +25,7 @@ public class EmpresaRepositoryTest {
     private Empresa empresaUpdate = new Empresa();
     Set<Endereco> endereco = new HashSet<Endereco>();
     Set<Telefone> telefone = new HashSet<Telefone>();
+    List<String> pesquisa = new ArrayList<String>();
 
     @Before
     public void setUp() {
@@ -57,8 +60,8 @@ public class EmpresaRepositoryTest {
         telefone.add(telefone1);
         telefone.add(telefone2);
 
-        this.empresa.setCnpj("68328285000128");
-        this.empresa.setRazaoSocial("exemplo");
+        this.empresa.setCnpj("72218452000155");
+        this.empresa.setRazaoSocial("teste");
         this.empresa.setProprietario("exemplo");
         this.empresa.setEmail("exemplo@gmail.com");
         this.empresa.setSite("exemplo.com.br");
@@ -66,7 +69,7 @@ public class EmpresaRepositoryTest {
         this.empresa.setTelefones(telefone);
         this.empresa.setDataDeCriacao(LocalDate.now());
 
-        this.empresaUpdate.setCnpj("68328285000128");
+        this.empresaUpdate.setCnpj("72218452000155");
         this.empresaUpdate.setRazaoSocial("TESTE2");
         this.empresaUpdate.setProprietario("TESTE");
         this.empresaUpdate.setEmail("teste@gmail.com");
@@ -108,15 +111,23 @@ public class EmpresaRepositoryTest {
     }
 
     @Test
-    public void deve_buscar_todos_os_documentos_da_empresa() {
+    public void deve_buscar_todas_as_empresas() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.buscaEmpresa(this.empresa);
+        System.out.println(repository.buscaEmpresa(this.empresa));
     }
 
     @Test
     public void deve_buscar_empresa_por_cnpj() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.buscaEmpresaPorCnpj(empresa.getCnpj());
+        System.out.println(repository.buscaEmpresaPorCnpj(empresa.getCnpj()));
+    }
+
+    @Test
+    public void deve_buscar_empresa_por_campos_predeterminados() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        pesquisa.add("_id");
+        pesquisa.add("razaoSocial");
+        System.out.println(repository.buscaEmpresaPor(pesquisa));
     }
 
 }

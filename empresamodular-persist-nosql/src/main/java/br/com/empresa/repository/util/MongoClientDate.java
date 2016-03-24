@@ -9,7 +9,6 @@ import org.bson.codecs.BsonTypeClassMap;
 import org.bson.codecs.DocumentCodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
-import org.joda.time.LocalDate;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;

@@ -4,16 +4,19 @@ import static br.com.contmatic.empresawilliam.util.ValidationUtil.hasErrors;
 import static br.com.empresa.repository.util.EmpresaDocument.findToDocumentFilter;
 import static br.com.empresa.repository.util.EmpresaDocument.toDocument;
 import static br.com.empresa.repository.util.EmpresaDocument.updateToDocumentFilter;
+import static br.com.empresa.repository.util.EmpresaObject.empresaToObject;
+import static com.mongodb.client.model.Projections.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bson.Document;
-import org.bson.codecs.configuration.CodecRegistry;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -46,6 +49,8 @@ public class EmpresaRepository {
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
             collection.insertOne(toDocument(empresa));
+        } catch (MongoWriteException e) {
+            throw new IllegalStateException("Empresa já existe.");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -91,7 +96,7 @@ public class EmpresaRepository {
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
-            collection.deleteOne(new Document("cnpj", empresaFiltro.getCnpj()));
+            collection.deleteOne(new Document("_id", empresaFiltro.getCnpj()));
         } finally {
             mongoClient.close();
         }
@@ -108,84 +113,83 @@ public class EmpresaRepository {
         }
     }
 
-    public void buscaEmpresa(Empresa empresa) {
+    public List<Empresa> buscaEmpresa(Empresa empresa) {
         try {
             this.mongoClient = new MongoClient(this.host + ":" + this.port, MongoClientDate.codecDate());
-            if (hasErrors(empresa)) {
-                throw new Exception("Foi encontrado erro em Empresa.");
-            }
             MongoDatabase database = mongoClient.getDatabase(this.db);
             FindIterable<Document> collection = database.getCollection(COLLECTION).find();
+            final List<Empresa> empresas = new ArrayList<>();
             collection.forEach(new Block<Document>() {
                 public void apply(final Document document) {
-                    Empresa empresa = EmpresaObject.empresaToObject(document);
-                    System.out.println(empresa.toString());
+                    empresas.add(EmpresaObject.empresaToObject(document));
                 }
             });
-        } catch (
-
-        Exception e) {
-            e.printStackTrace();
+            return empresas;
         } finally {
             mongoClient.close();
         }
+
     }
 
-    public void buscaEmpresa(Empresa empresa, String campoBuscado) {
+    public List<Empresa> buscaEmpresaPorCnpj(String cnpj) {
         try {
             this.mongoClient = new MongoClient(this.host + ":" + this.port, MongoClientDate.codecDate());
-            if (hasErrors(empresa)) {
-                throw new Exception("Foi encontrado erro em Empresa.");
+            MongoDatabase database = mongoClient.getDatabase(this.db);
+            FindIterable<Document> collection = database.getCollection(COLLECTION).find(new Document("_id", cnpj));
+            final List<Empresa> empresas = new ArrayList<>();
+            collection.forEach(new Block<Document>() {
+                public void apply(final Document document) {
+                    empresas.add(empresaToObject(document));
+                }
+            });
+            return empresas;
+        } finally {
+            mongoClient.close();
+        }
+
+    }
+
+    public List<Empresa> buscaEmpresaPor(List<String> key, Integer filtro) {
+        try {
+            this.mongoClient = new MongoClient(this.host + ":" + this.port, MongoClientDate.codecDate());
+            MongoDatabase database = mongoClient.getDatabase(this.db);
+            final List<Empresa> empresas = new ArrayList<>();
+            FindIterable<Document> collection;
+            for(int i = 0 ; i < key.size() ; i++) {
+                collection = database.getCollection(COLLECTION).find(new Document(key.get(i), filtro));
+                collection.forEach(new Block<Document>() {
+                    public void apply(final Document document) {
+                        empresas.add(empresaToObject(document));
+                    }
+                });
             }
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            FindIterable<Document> collection = database.getCollection(COLLECTION).find(new Document(toDocument(empresa)));
-            collection.forEach(new Block<Document>() {
-                public void apply(final Document document) {
-                    System.out.println(document.getString(campoBuscado));
-                }
-            });
-        } catch (
-
-        Exception e) {
-            e.printStackTrace();
+            return empresas;
         } finally {
             mongoClient.close();
         }
     }
 
-    public String buscaEmpresaPorCnpj(String cnpj) {
-        try {
-
-            this.mongoClient = new MongoClient(this.host + ":" + this.port, MongoClientDate.codecDate());
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            FindIterable<Document> collection = database.getCollection(COLLECTION).find(new Document("cnpj", cnpj));
-            collection.forEach(new Block<Document>() {
-
-                public String apply(final Document document) {
-                    final String result;
-                    result = EmpresaObject.empresaToObject(document).toString();
-                }
-
-            });
-            return result;
-        } finally {
-            mongoClient.close();
-        }
-
-    }
-
-    public Empresa buscaEmpresaPor(String cnpj) {
+    public Map<String, String> buscaEmpresaPor(List<String> key) {
         try {
             this.mongoClient = new MongoClient(this.host + ":" + this.port, MongoClientDate.codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
-            FindIterable<Document> collection = database.getCollection(COLLECTION).find(new Document("cnpj", cnpj));
-            collection.forEach(new Block<Document>() {
-                public void apply(final Document document) {
-                }
-            });
+            Map<String, String> empresas = new HashMap<>();
+            FindIterable<Document> collection;
+            List<Integer> is = new ArrayList<>();
+            List<Empresa> empresa = new ArrayList<>();
+            for(int i = 0 ; i < key.size() ; i++)
+                is.add(i);
+            for(final int i : is) {
+                collection = database.getCollection(COLLECTION).find().projection(include(key));
+                collection.forEach(new Block<Document>() {
+                    public void apply(final Document document) {
+                        empresas.put(key.get(i), document.getString(key.get(i)));
+                    }
+                });
+            }
+            return empresas;
         } finally {
             mongoClient.close();
         }
     }
-
 }
