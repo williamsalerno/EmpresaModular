@@ -66,7 +66,7 @@ public class EmpresaDocumentTest {
         empresa.setEnderecos(enderecos);
         empresa.setTelefones(telefones);
 
-        Document empresaDoc = EmpresaDocument.toDocument(empresa);
+        Document empresaDoc = EmpresaAssembler.toDocument(empresa);
         @SuppressWarnings("unchecked")
         List<Document> enderecoDoc = (List<Document>) empresaDoc.get("enderecos");
 
@@ -112,7 +112,7 @@ public class EmpresaDocumentTest {
 
     @Test
     public void deve_aceitar_null_se_empresa_e_null() {
-        assertNull(EmpresaDocument.toDocument(null));
+        assertNull(EmpresaAssembler.toDocument(null));
     }
 
 }
