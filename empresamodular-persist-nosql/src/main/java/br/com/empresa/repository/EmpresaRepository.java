@@ -5,6 +5,7 @@ import static br.com.empresa.repository.util.EmpresaAssembler.findToDocumentFilt
 import static br.com.empresa.repository.util.EmpresaAssembler.toDocument;
 import static br.com.empresa.repository.util.EmpresaAssembler.updateToDocumentFilter;
 import static br.com.empresa.repository.util.EmpresaObject.empresaToObject;
+import static br.com.empresa.repository.util.MongoClientDate.codecDate;
 import static com.mongodb.client.model.Projections.fields;
 import static com.mongodb.client.model.Projections.include;
 
@@ -26,9 +27,12 @@ import com.mongodb.client.MongoDatabase;
 
 import br.com.contmatic.empresawilliam.Empresa;
 import br.com.contmatic.empresawilliam.util.ValidationUtil;
-import br.com.empresa.repository.util.EmpresaObject;
 import br.com.empresa.repository.util.MongoClientDate;
 
+/**
+ * @author William
+ *
+ */
 public class EmpresaRepository {
 
 	private String host;
@@ -164,17 +168,17 @@ public class EmpresaRepository {
 		try {
 			List<Empresa> empresas = new ArrayList<>();
 			Document doc = new Document(updateToDocumentFilter(empresaFind));
-			this.mongoClient = new MongoClient(this.host + ":" + this.port, MongoClientDate.codecDate());
+			this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
 			MongoDatabase database = mongoClient.getDatabase(this.db);
-			Set<String> SetKeys = doc.keySet();
-			List<String> listaKeys = new ArrayList<>();
-			Iterator<String> itr = SetKeys.iterator();
+			Set<String> setKeys = doc.keySet();
+			List<String> listKeys = new ArrayList<>();
+			Iterator<String> itr = setKeys.iterator();
 			while (itr.hasNext()) {
-				listaKeys.add(itr.next());
+				listKeys.add(itr.next());
 			}
 			FindIterable<Document> collection;
 			collection = database.getCollection(COLLECTION).find()
-					.projection(fields(include("_id"), include(listaKeys)));
+					.projection(fields(include("_id"), include(listKeys)));
 			collection.forEach(new Block<Document>() {
 				public void apply(final Document document) {
 					empresas.add(empresaToObject(document));

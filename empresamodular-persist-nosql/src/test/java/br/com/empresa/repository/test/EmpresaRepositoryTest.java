@@ -19,6 +19,10 @@ import br.com.contmatic.empresawilliam.Endereco;
 import br.com.contmatic.empresawilliam.Telefone;
 import br.com.empresa.repository.EmpresaRepository;
 
+/**
+ * @author William
+ *
+ */
 public class EmpresaRepositoryTest {
 
 	private Empresa empresa = new Empresa();
@@ -82,6 +86,7 @@ public class EmpresaRepositoryTest {
 
 		this.empresaFind.setProprietario("exemplo");
 		this.empresaFind.setRazaoSocial("teste");
+		this.empresaFind.setEmail("exemplo@gmail.com");
 	}
 
 	@Test
@@ -132,5 +137,4 @@ public class EmpresaRepositoryTest {
 		pesquisa.add("proprietario");
 		System.out.println(repository.buscaEmpresaPor(pesquisa));
 	}
-
 }

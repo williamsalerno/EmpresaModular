@@ -9,6 +9,10 @@ import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 import org.joda.time.LocalDate;
 
+/**
+ * @author William
+ *
+ */
 public class LocalDateCodec implements Codec<LocalDate> {
 
     @Override

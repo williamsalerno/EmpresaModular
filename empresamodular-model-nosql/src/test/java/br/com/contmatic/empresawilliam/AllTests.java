@@ -7,6 +7,10 @@ import org.junit.runners.Suite.SuiteClasses;
 /**
  * The Class AllTests.
  */
+/**
+ * @author William
+ *
+ */
 @RunWith(Suite.class)
 @SuiteClasses({ EmpresaTeste.class, EnderecoTeste.class, TelefoneTeste.class })
 public class AllTests {

@@ -14,6 +14,10 @@ import org.joda.time.LocalDate;
 
 import br.com.contmatic.empresawilliam.Empresa;
 
+/**
+ * @author William
+ *
+ */
 public final class EmpresaAssembler {
 
 	private EmpresaAssembler() {

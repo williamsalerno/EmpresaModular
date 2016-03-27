@@ -20,6 +20,10 @@ import org.junit.runners.MethodSorters;
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
+/**
+ * @author William
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmpresaTeste {
 
@@ -57,6 +61,9 @@ public class EmpresaTeste {
 
     // Testes
 
+    /**
+     * 
+     */
     @Test
     public void deve_aceitar_cnpj_valido() {
         assertThat(hasErrors(empresa, null), is(false));

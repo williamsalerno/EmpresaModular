@@ -10,6 +10,10 @@ import org.bson.Document;
 import br.com.contmatic.empresawilliam.Telefone;
 import br.com.contmatic.empresawilliam.TelefoneType;
 
+/**
+ * @author William
+ *
+ */
 public class TelefoneAssembler {
 
     private TelefoneAssembler() {

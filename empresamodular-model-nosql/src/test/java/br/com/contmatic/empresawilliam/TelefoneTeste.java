@@ -18,6 +18,10 @@ import org.junit.runners.MethodSorters;
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
+/**
+ * @author William
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TelefoneTeste {
 

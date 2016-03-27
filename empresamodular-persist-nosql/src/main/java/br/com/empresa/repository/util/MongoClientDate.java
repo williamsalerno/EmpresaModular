@@ -13,6 +13,10 @@ import org.bson.codecs.configuration.CodecRegistry;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 
+/**
+ * @author William
+ *
+ */
 public class MongoClientDate {
 
     private MongoClientDate() {

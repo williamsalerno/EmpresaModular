@@ -9,6 +9,10 @@ import org.bson.codecs.Codec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 
+/**
+ * @author William
+ *
+ */
 public class DateCodec implements Codec<Date> {
 
     public void encode(BsonWriter writer, Date value, EncoderContext encoderContext) {

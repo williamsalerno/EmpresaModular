@@ -10,6 +10,10 @@ import org.bson.Document;
 import br.com.contmatic.empresawilliam.Endereco;
 import br.com.contmatic.empresawilliam.EnderecoType;
 
+/**
+ * @author William
+ *
+ */
 public class EnderecoAssembler {
 
     private EnderecoAssembler() {
