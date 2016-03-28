@@ -111,12 +111,12 @@ public class EmpresaRepository {
 		}
 	}
 
-	public void removeEmpresas(Empresa empresaFiltro) {
+	public void removeEmpresas() {
 		try {
 			this.mongoClient = new MongoClient(this.host, this.port);
 			MongoDatabase database = mongoClient.getDatabase(this.db);
 			MongoCollection<Document> collection = database.getCollection(COLLECTION);
-			collection.deleteMany(findToDocumentFilter(empresaFiltro));
+			collection.deleteMany(new Document());
 		} finally {
 			mongoClient.close();
 		}

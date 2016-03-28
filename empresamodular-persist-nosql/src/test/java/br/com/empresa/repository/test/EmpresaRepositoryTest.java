@@ -65,7 +65,7 @@ public class EmpresaRepositoryTest {
 		telefone.add(telefone1);
 		telefone.add(telefone2);
 
-		this.empresa.setCnpj("62726723000120");
+		this.empresa.setCnpj("72218452000155");
 		this.empresa.setRazaoSocial("teste");
 		this.empresa.setProprietario("exemplo");
 		this.empresa.setEmail("exemplo@gmail.com");
@@ -74,7 +74,7 @@ public class EmpresaRepositoryTest {
 		this.empresa.setTelefones(telefone);
 		this.empresa.setDataDeCriacao(LocalDate.now());
 
-		this.empresaUpdate.setCnpj("72218452000155");
+		this.empresaUpdate.setCnpj("62726723000120");
 		this.empresaUpdate.setRazaoSocial("TESTE2");
 		this.empresaUpdate.setProprietario("TESTE");
 		this.empresaUpdate.setEmail("teste@gmail.com");
@@ -116,7 +116,7 @@ public class EmpresaRepositoryTest {
 	@Test
 	public void deve_remover_empresas() {
 		EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-		repository.removeEmpresas(this.empresa);
+		repository.removeEmpresas();
 	}
 
 	@Test
@@ -134,7 +134,7 @@ public class EmpresaRepositoryTest {
 	@Test
 	public void deve_buscar_empresa_por_lista_de_campos() {
 		EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-		pesquisa.add("proprietario");
+		pesquisa.add("_id");
 		System.out.println(repository.buscaEmpresaPor(pesquisa));
 	}
 }
