@@ -130,16 +130,6 @@ public class Empresa {
 	@Pattern(regexp = "\\w{1,8}", message = "Existem Apelidos de Empresas contendo caracteres não permitidos pelo sistema operacional")
 	String apelido;
 
-	// tarefa----------------------------------------------------------------------------------------------------------------------------------
-	public String getApelido() {
-		return apelido;
-	}
-
-	public void setApelido(String apelido) {
-		this.apelido = apelido;
-	}
-	// tarefa----------------------------------------------------------------------------------------------------------------------------------
-
 	private boolean pesquisa = false;
 
 	// getters e setters

@@ -1,4 +1,4 @@
-package br.com.empresa.repository.util;
+package br.com.contmatic.empresawilliam.assembler;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,14 +11,24 @@ import br.com.contmatic.empresawilliam.Telefone;
 import br.com.contmatic.empresawilliam.TelefoneType;
 
 /**
- * @author William
+ * The Class TelefoneAssembler.
  *
+ * @author William
  */
 public class TelefoneAssembler {
 
+    /**
+     * Instantiates a new telefone assembler.
+     */
     private TelefoneAssembler() {
     }
 
+    /**
+     * To document.
+     *
+     * @param telefone the telefone
+     * @return the document
+     */
     public static Document toDocument(Telefone telefone) {
         if (telefone != null) {
             Document telefoneDoc = new Document("ddd", telefone.getDdd()).append("telefone", telefone.getTelefone()).append("tipoTelefone", telefone.getTipoTelefone().name());
@@ -27,6 +37,12 @@ public class TelefoneAssembler {
         return null;
     }
 
+    /**
+     * Document to telefone.
+     *
+     * @param document the document
+     * @return the telefone
+     */
     public static Telefone documentToTelefone(Document document) {
         Telefone telefone = new Telefone();
         if (document == null) {
@@ -39,6 +55,12 @@ public class TelefoneAssembler {
         }
     }
 
+    /**
+     * To document.
+     *
+     * @param telefones the telefones
+     * @return the list
+     */
     public static List<Document> toDocument(Set<Telefone> telefones) {
         if (telefones != null) {
             List<Document> lista = new ArrayList<Document>();
@@ -50,6 +72,12 @@ public class TelefoneAssembler {
         return null;
     }
 
+    /**
+     * To telefone.
+     *
+     * @param listaTelefone the lista telefone
+     * @return the set
+     */
     public static Set<Telefone> toTelefone(List<Document> listaTelefone) {
         Set<Telefone> telefones = new HashSet<Telefone>();
         if (listaTelefone != null) {
@@ -61,6 +89,12 @@ public class TelefoneAssembler {
         return null;
     }
 
+    /**
+     * Tipo telefone.
+     *
+     * @param doc the doc
+     * @return the telefone type
+     */
     public static TelefoneType tipoTelefone(Document doc) {
         if (doc.get("tipoTelefone").equals(TelefoneType.CELULAR.name())) {
             return TelefoneType.CELULAR;

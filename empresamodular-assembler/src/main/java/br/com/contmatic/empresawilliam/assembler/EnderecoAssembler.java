@@ -1,4 +1,4 @@
-package br.com.empresa.repository.util;
+package br.com.contmatic.empresawilliam.assembler;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,14 +11,24 @@ import br.com.contmatic.empresawilliam.Endereco;
 import br.com.contmatic.empresawilliam.EnderecoType;
 
 /**
- * @author William
+ * The Class EnderecoAssembler.
  *
+ * @author William
  */
 public class EnderecoAssembler {
 
+    /**
+     * Instantiates a new endereco assembler.
+     */
     private EnderecoAssembler() {
     }
 
+    /**
+     * To document.
+     *
+     * @param endereco the endereco
+     * @return the document
+     */
     public static Document toDocument(Endereco endereco) {
         if (endereco != null) {
             Document enderecoDoc = new Document("tipoLogradouro", endereco.getTipoLogradouro()).append("nomeLogradouro", endereco.getNomeLogradouro())
@@ -28,6 +38,12 @@ public class EnderecoAssembler {
         return null;
     }
 
+    /**
+     * To document.
+     *
+     * @param enderecos the enderecos
+     * @return the list
+     */
     public static List<Document> toDocument(Set<Endereco> enderecos) {
         if (enderecos != null) {
             List<Document> lista = new ArrayList<Document>();
@@ -40,6 +56,12 @@ public class EnderecoAssembler {
 
     }
 
+    /**
+     * Document to endereco.
+     *
+     * @param document the document
+     * @return the endereco
+     */
     public static Endereco documentToEndereco(Document document) {
         Endereco endereco = new Endereco();
         if (document == null) {
@@ -54,6 +76,12 @@ public class EnderecoAssembler {
         }
     }
 
+    /**
+     * To endereco.
+     *
+     * @param listaEndereco the lista endereco
+     * @return the set
+     */
     public static Set<Endereco> toEndereco(List<Document> listaEndereco) {
         Set<Endereco> enderecos = new HashSet<Endereco>();
         if (listaEndereco != null) {
@@ -66,6 +94,12 @@ public class EnderecoAssembler {
         return null;
     }
 
+    /**
+     * Tipo endereco.
+     *
+     * @param doc the doc
+     * @return the endereco type
+     */
     public static EnderecoType tipoEndereco(Document doc) {
         if (doc.get("tipoEndereco").equals(EnderecoType.COMERCIAL.name())) {
             return EnderecoType.COMERCIAL;

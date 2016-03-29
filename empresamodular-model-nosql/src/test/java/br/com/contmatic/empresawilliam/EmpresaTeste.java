@@ -28,7 +28,6 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 public class EmpresaTeste {
 
     private Empresa empresa;
-    private Empresa tarefa;
     private Empresa empresaInvalida;
     private LocalDate dataTesteOntem;
 
@@ -46,7 +45,6 @@ public class EmpresaTeste {
         this.empresa = Fixture.from(Empresa.class).gimme("empresa_valida");
         this.empresaInvalida = Fixture.from(Empresa.class).gimme("empresa_invalida");
         this.dataTesteOntem = LocalDate.now().minusDays(1);
-        this.tarefa = Fixture.from(Empresa.class).gimme("tarefa");
     }
 
     @After
@@ -351,30 +349,6 @@ public class EmpresaTeste {
     @Test
     public void nao_deve_aceitar_empresa_nulo() {
         System.out.println(empresa);
-    }
-
-    // TAREFA=====================================================================================================================================
-    @Test
-    public void nao_deve_aceitar_caracteres_invalidos() {
-        assertTrue(hasErrors(tarefa, "Existem Apelidos de Empresas contendo caracteres não permitidos pelo sistema operacional"));
-    }
-
-    @Test
-    public void deve_aceitar_caracteres_validos() {
-        empresa.setApelido("a_");
-        assertThat(hasErrors(empresa, null), is(false));
-    }
-
-    @Test
-    public void nao_deve_aceitar_mais_que_maximo_caracteres() {
-        empresa.setApelido("abcdefghi");
-        assertTrue(hasErrors(tarefa, "Existem Apelidos de Empresas contendo caracteres não permitidos pelo sistema operacional"));
-    }
-
-    @Test
-    public void nao_deve_aceitar_menos_que_minimo_caracteres() {
-        empresa.setApelido(" ");
-        assertTrue(hasErrors(tarefa, "Existem Apelidos de Empresas contendo caracteres não permitidos pelo sistema operacional"));
     }
 
 }

@@ -1,4 +1,4 @@
-package br.com.empresa.repository.util;
+package br.com.contmatic.empresawilliam.assembler;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -14,15 +14,24 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 
 /**
- * @author William
+ * The Class MongoClientDate.
  *
+ * @author William
  */
 public class MongoClientDate {
 
+    /**
+     * Instantiates a new mongo client date.
+     */
     private MongoClientDate() {
 
     }
 
+    /**
+     * Codec date.
+     *
+     * @return the mongo client options
+     */
     public static MongoClientOptions codecDate() {
         Map<BsonType, Class<?>> replacements = new HashMap<BsonType, Class<?>>();
         replacements.put(BsonType.DATE_TIME, Date.class);

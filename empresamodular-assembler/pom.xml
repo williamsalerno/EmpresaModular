@@ -6,12 +6,14 @@
 		<artifactId>EmpresaModular</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>empresamodular-persist-nosql</artifactId>
+	<groupId>br.com.contmatic.empresamodular.assembler</groupId>
+	<artifactId>empresamodular-assembler</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>br.com.contmatic.empresamodular.assembler</groupId>
-			<artifactId>empresamodular-assembler</artifactId>
+			<groupId>br.com.williamsalerno</groupId>
+			<artifactId>empresamodular-model-nosql</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+
 </project>
