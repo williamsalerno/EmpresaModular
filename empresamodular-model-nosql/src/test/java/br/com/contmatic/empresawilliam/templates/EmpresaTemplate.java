@@ -29,7 +29,7 @@ public class EmpresaTemplate implements TemplateLoader {
                 add("cnpj", cnpj());
                 add("proprietario", random("Fulano", "Ciclano", "Alguém", "Eu"));
                 add("email", random("fulano@exemplo.com", "ciclano@teste.com", "eu@teste.com.br"));
-                add("site", random("teste.com.br", "exemplo.com"));
+                add("site", random("teste.com.br", "exemplo.com.br"));
                 add("enderecos", has(2).of(Endereco.class, "endereco_valido"));
                 add("telefones", has(2).of(Telefone.class, "fixo_valido", "celular_valido"));
                 add("dataDeCriacao", random(LocalDate.now()));
@@ -48,11 +48,5 @@ public class EmpresaTemplate implements TemplateLoader {
                 add("dataDeAlteracao", random(LocalDate.now()));
             }
         });
-        Fixture.of(Empresa.class).addTemplate("tarefa", new Rule() {
-            {
-                add("apelido", random("<", ">", ":", "?", "/", "|"));
-            }
-        });
     }
-
 }

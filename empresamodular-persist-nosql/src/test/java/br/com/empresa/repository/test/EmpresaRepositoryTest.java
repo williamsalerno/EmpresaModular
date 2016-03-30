@@ -12,12 +12,15 @@ import java.util.Set;
 
 import org.joda.time.LocalDate;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import br.com.contmatic.empresawilliam.Empresa;
 import br.com.contmatic.empresawilliam.Endereco;
 import br.com.contmatic.empresawilliam.Telefone;
 import br.com.empresa.repository.EmpresaRepository;
+import br.com.six2six.fixturefactory.Fixture;
+import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
 /**
  * @author William
@@ -25,15 +28,25 @@ import br.com.empresa.repository.EmpresaRepository;
  */
 public class EmpresaRepositoryTest {
 
-    private Empresa empresa = new Empresa();
-    private Empresa empresaUpdate = new Empresa();
-    private Empresa empresaFind = new Empresa();
-    Set<Endereco> endereco = new HashSet<Endereco>();
-    Set<Telefone> telefone = new HashSet<Telefone>();
-    List<String> pesquisa = new ArrayList<String>();
+    private Empresa empresa;
+    private Empresa empresaUpdate;
+    private Empresa empresaFind;
+    Set<Endereco> endereco;
+    Set<Telefone> telefone;
+    List<String> pesquisa;
+
+    @BeforeClass
+    public static void setUpBeforeClass() {
+        FixtureFactoryLoader.loadTemplates("br.com.contmatic.empresawilliam.templates");
+    }
 
     @Before
     public void setUp() {
+        empresa = Fixture.from(Empresa.class).gimme("empresa_valida");
+        empresaUpdate = new Empresa();
+        empresaFind = new Empresa();
+        endereco = new HashSet<Endereco>();
+        telefone = new HashSet<Telefone>();
         Endereco endereco1 = new Endereco();
         Endereco endereco2 = new Endereco();
         Telefone telefone1 = new Telefone();
@@ -65,15 +78,6 @@ public class EmpresaRepositoryTest {
         telefone.add(telefone1);
         telefone.add(telefone2);
 
-        this.empresa.setCnpj("72218452000155");
-        this.empresa.setRazaoSocial("teste");
-        this.empresa.setProprietario("exemplo");
-        this.empresa.setEmail("exemplo@gmail.com");
-        this.empresa.setSite("exemplo.com.br");
-        this.empresa.setEnderecos(endereco);
-        this.empresa.setTelefones(telefone);
-        this.empresa.setDataDeCriacao(LocalDate.now());
-
         this.empresaUpdate.setCnpj("62726723000120");
         this.empresaUpdate.setRazaoSocial("TESTE2");
         this.empresaUpdate.setProprietario("TESTE");
@@ -89,10 +93,13 @@ public class EmpresaRepositoryTest {
         this.empresaFind.setEmail("exemplo@gmail.com");
     }
 
-    @Test
+    @Test()
     public void deve_incluir_empresa_uma_vez() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.saveEmpresa(this.empresa);
+        for(int i = 0 ; i < 99999 ; i++) {
+            empresa = Fixture.from(Empresa.class).gimme("empresa_valida");
+            repository.saveEmpresa(this.empresa);
+        }
     }
 
     @Test
@@ -128,6 +135,7 @@ public class EmpresaRepositoryTest {
     @Test
     public void deve_buscar_empresa_por_campos_predeterminados() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        pesquisa = new ArrayList<String>();
         pesquisa.add("_id");
         System.out.println(repository.buscaEmpresaPor(pesquisa));
     }
@@ -135,8 +143,12 @@ public class EmpresaRepositoryTest {
     @Test
     public void deve_buscar_empresa_por_lista_de_campos() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        pesquisa.add("razaoSocial");
-        pesquisa.add("_id");
         System.out.println(repository.buscaEmpresaPor(empresaFind));
+    }
+
+    @Test
+    public void deve_pagina_busca_de_empresas() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        System.out.println(repository.paginarBuscas(3, 5));
     }
 }

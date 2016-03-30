@@ -6,6 +6,8 @@ import static br.com.contmatic.empresawilliam.assembler.EmpresaAssembler.updateT
 import static br.com.contmatic.empresawilliam.assembler.EmpresaObject.empresaToObject;
 import static br.com.contmatic.empresawilliam.assembler.MongoClientDate.codecDate;
 import static br.com.contmatic.empresawilliam.util.ValidationUtil.hasErrors;
+import static br.com.empresa.repository.util.RepositoryUtil.PAGINA;
+import static br.com.empresa.repository.util.RepositoryUtil.manageNumberPages;
 import static com.mongodb.client.model.Projections.fields;
 import static com.mongodb.client.model.Projections.include;
 
@@ -27,6 +29,7 @@ import com.mongodb.client.MongoDatabase;
 
 import br.com.contmatic.empresawilliam.Empresa;
 import br.com.contmatic.empresawilliam.util.ValidationUtil;
+import br.com.empresa.repository.util.RepositoryUtil;
 
 /**
  * The Class EmpresaRepository.
@@ -255,20 +258,13 @@ public class EmpresaRepository {
      * @param elementosPorPagina the elementos por pagina
      * @return the list
      */
-    public List<Empresa> paginarBuscas(Empresa empresaFiltro, int elementosPorPagina) {
+    public List<Empresa> paginarBuscas(int numeroPagina, int elementosPorPagina) {
         try {
             List<Empresa> empresas = new ArrayList<Empresa>();
-            Document doc = new Document(updateToDocumentFilter(empresaFiltro));
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
-            Set<String> setKeys = doc.keySet();
-            List<String> listKeys = new ArrayList<String>();
-            Iterator<String> itr = setKeys.iterator();
-            while (itr.hasNext()) {
-                listKeys.add(itr.next());
-            }
             FindIterable<Document> collection;
-            collection = database.getCollection(COLLECTION).find().skip(0).limit(elementosPorPagina);
+            collection = database.getCollection(COLLECTION).find().skip(numeroPagina * (elementosPorPagina - 1)).limit(elementosPorPagina).sort(new Document("cnpj", 1));
             collection.forEach(new Block<Document>() {
                 public void apply(final Document document) {
                     empresas.add(empresaToObject(document));

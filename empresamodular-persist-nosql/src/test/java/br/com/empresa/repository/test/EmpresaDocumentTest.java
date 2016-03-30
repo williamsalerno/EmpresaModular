@@ -1,4 +1,4 @@
-package br.com.empresa.repository.util;
+package br.com.empresa.repository.test;
 
 import static br.com.contmatic.empresawilliam.EnderecoType.COMERCIAL;
 import static br.com.contmatic.empresawilliam.EnderecoType.RESIDENCIAL;

@@ -43,7 +43,7 @@ public class Endereco {
     @NotNull(message = "O tipo de logradouro deve ser preenchido.")
     @NotEmpty(message = "O tipo de logradouro não pode ficar vazio.")
     @NotBlank(message = "O tipo de logradouro não pode ficar vazio.")
-    @Pattern(regexp = "[a-zA-Z]{3,10}", message = "O tipo de logradouro deve conter entre 3 e 10 caracteres, sem números.")
+    @Pattern(regexp = "[a-zA-Zç]{3,10}", message = "O tipo de logradouro deve conter entre 3 e 10 caracteres, sem números.")
     private String tipoLogradouro;
 
     /** The nome logradouro. */
@@ -51,7 +51,7 @@ public class Endereco {
     @NotEmpty(message = "O nome de logradouro não pode ficar vazio.")
     @NotBlank(message = "O nome de logradouro não pode ficar vazio.")
     @Length(max = TAMANHO_NOME_DE_LOGRADOURO_MAXIMO, message = "O nome de logradouro deve conter entre 1 e {max} caracteres.")
-    @Pattern(regexp = "[a-zA-Zá-úÁ-Ú0-9]+", message = "O nome de logradouro deve conter apenas caracteres alfanuméricos.")
+    @Pattern(regexp = "[^ ][a-zA-Zá-úÁ-Ú0-9 ]+", message = "O nome de logradouro deve conter apenas caracteres alfanuméricos.")
     private String nomeLogradouro;
 
     /** The cep. */
