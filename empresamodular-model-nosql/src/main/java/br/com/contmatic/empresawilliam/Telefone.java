@@ -1,3 +1,21 @@
+/******************************************************************************
+ * Produto: Gestor de Empresas                                                *
+ * Contmatic Phoenix © Desde 1986                                             *
+ * Tecnologia em Softwares de Gestão Contábil, Empresarial e ERP              *
+ * Todos os direitos reservados.                                              *
+ *                                                                            *
+ *                                                                            *
+ *    Histórico:                                                              *
+ *          Data        Programador              Tarefa                       *
+ *          ----------  -----------------        -----------------------------*
+ *   Autor  31/03/2016  william.salerno          Classe criada.        	      *
+ *                                                                            *
+ *   Comentários:                                                             *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *****************************************************************************/
 package br.com.contmatic.empresawilliam;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -95,7 +113,7 @@ public class Telefone {
     /**
      * Determina um valor para número de telefone e chama um método de verificação.
      *
-     * @param telefoneFixo the new telefone fixo
+     * @param telefone the new telefone
      */
     public void setTelefone(String telefone) {
         this.telefone = telefone;

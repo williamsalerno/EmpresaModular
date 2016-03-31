@@ -1,39 +1,43 @@
+/******************************************************************************
+ * Produto: Gestor de Empresas                                                *
+ * Contmatic Phoenix © Desde 1986                                             *
+ * Tecnologia em Softwares de Gestão Contábil, Empresarial e ERP              *
+ * Todos os direitos reservados.                                              *
+ *                                                                            *
+ *                                                                            *
+ *    Histórico:                                                              *
+ *          Data        Programador              Tarefa                       *
+ *          ----------  -----------------        -----------------------------*
+ *   Autor  31/03/2016  william.salerno          Classe criada.        	      *
+ *                                                                            *
+ *   Comentários:                                                             *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *****************************************************************************/
 package br.com.empresa.repository.test;
 
-import static br.com.contmatic.empresawilliam.EnderecoType.COMERCIAL;
-import static br.com.contmatic.empresawilliam.EnderecoType.RESIDENCIAL;
-import static br.com.contmatic.empresawilliam.TelefoneType.CELULAR;
-import static br.com.contmatic.empresawilliam.TelefoneType.FIXO;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import br.com.contmatic.empresawilliam.Empresa;
-import br.com.contmatic.empresawilliam.Endereco;
-import br.com.contmatic.empresawilliam.Telefone;
 import br.com.empresa.repository.EmpresaRepository;
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
 /**
- * @author William
+ * The Class EmpresaRepositoryTest.
  *
+ * @author William
  */
 public class EmpresaRepositoryTest {
 
     private Empresa empresa;
     private Empresa empresaUpdate;
     private Empresa empresaFind;
-    Set<Endereco> endereco;
-    Set<Telefone> telefone;
-    List<String> pesquisa;
+    private String cnpjFiltro;
 
     @BeforeClass
     public static void setUpBeforeClass() {
@@ -43,112 +47,115 @@ public class EmpresaRepositoryTest {
     @Before
     public void setUp() {
         empresa = Fixture.from(Empresa.class).gimme("empresa_valida");
-        empresaUpdate = new Empresa();
-        empresaFind = new Empresa();
-        endereco = new HashSet<Endereco>();
-        telefone = new HashSet<Telefone>();
-        Endereco endereco1 = new Endereco();
-        Endereco endereco2 = new Endereco();
-        Telefone telefone1 = new Telefone();
-        Telefone telefone2 = new Telefone();
-
-        endereco1.setTipoLogradouro("Rua");
-        endereco1.setNomeLogradouro("Exemplo");
-        endereco1.setNumeroEndereco(100);
-        endereco1.setCep("12345678");
-        endereco1.setTipoEndereco(COMERCIAL);
-
-        endereco2.setTipoLogradouro("Avenida");
-        endereco2.setNomeLogradouro("Teste");
-        endereco2.setNumeroEndereco(999);
-        endereco2.setCep("87654321");
-        endereco2.setTipoEndereco(RESIDENCIAL);
-
-        this.endereco.add(endereco1);
-        this.endereco.add(endereco2);
-
-        telefone1.setDdd(11);
-        telefone1.setTelefone("12345678");
-        telefone1.setTipoTelefone(FIXO);
-
-        telefone2.setDdd(11);
-        telefone2.setTelefone("123456789");
-        telefone2.setTipoTelefone(CELULAR);
-
-        telefone.add(telefone1);
-        telefone.add(telefone2);
-
-        this.empresaUpdate.setCnpj("62726723000120");
-        this.empresaUpdate.setRazaoSocial("TESTE2");
-        this.empresaUpdate.setProprietario("TESTE");
-        this.empresaUpdate.setEmail("teste@gmail.com");
-        this.empresaUpdate.setSite("teste.com.br");
-        this.empresaUpdate.setEnderecos(endereco);
-        this.empresaUpdate.setTelefones(telefone);
-        this.empresaUpdate.setDataDeCriacao(empresa.getDataDeCriacao());
-        this.empresaUpdate.setDataDeAlteracao(LocalDate.now().plusDays(20));
-
-        this.empresaFind.setProprietario("exemplo");
-        this.empresaFind.setRazaoSocial("teste");
-        this.empresaFind.setEmail("exemplo@gmail.com");
+        empresaUpdate = Fixture.from(Empresa.class).gimme("empresa_valida");
+        cnpjFiltro = empresa.getCnpj();
     }
 
+    // Save====================================================================================================================
     @Test()
     public void deve_incluir_empresa_uma_vez() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        for(int i = 0 ; i < 99999 ; i++) {
-            empresa = Fixture.from(Empresa.class).gimme("empresa_valida");
-            repository.saveEmpresa(this.empresa);
-        }
+        repository.saveEmpresa(this.empresa);
+    }
+
+    // Update===================================================================================================================
+    @Test
+    public void deve_atualizar_empresa_por_cnpj() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        repository.updateEmpresaPorCnpj(cnpjFiltro, this.empresaUpdate);
     }
 
     @Test
-    public void deve_atualizar_empresa() {
+    public void deve_atualizar_empresa_por_filtro() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.updateEmpresa(this.empresa, this.empresaUpdate);
+        empresaFind = new Empresa();
+        this.empresaFind.setProprietario("Fulano");
+        this.empresaFind.setRazaoSocial("Fiap");
+        this.empresaFind.setEmail("ciclano@teste.com");
+        repository.updateEmpresaPorFiltro(this.empresaFind, this.empresaUpdate);
     }
 
     @Test
-    public void deve_atualizar_empresas() {
+    public void deve_atualizar_empresas_por_filtro() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.updateEmpresas(this.empresa, this.empresaUpdate);
+        empresaFind = new Empresa();
+
+        this.empresaFind.setRazaoSocial("Uniquintal");
+        Empresa emp = new Empresa();
+        emp.setRazaoSocial("TESTE");
+        repository.updateEmpresasPorFiltro(this.empresaFind, emp);
+    }
+
+    // Remove===================================================================================================================
+    @Test
+    public void deve_remover_empresa_por_cnpj() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        repository.removeEmpresaPorCnpj("47752365000136");
     }
 
     @Test
-    public void deve_remover_empresa() {
+    public void deve_remover_empresa_por_filtro() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.removeEmpresa(this.empresa);
+        empresaFind = new Empresa();
+        this.empresaFind.setProprietario("Fulano");
+        repository.removeEmpresaPorFiltro(this.empresaFind);
     }
 
     @Test
-    public void deve_remover_empresas() {
+    public void deve_remover_empresas_por_filtro() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        repository.removeEmpresas();
+        empresaFind = new Empresa();
+        this.empresaFind.setEnderecos(empresa.getEnderecos());
+        repository.removeEmpresasPorFiltro(this.empresaFind);
+    }
+
+    // Find===================================================================================================================
+    @Test
+    public void deve_buscar_empresa_por_cnpj() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        System.out.println(repository.buscaEmpresaPorCnpj("47752365000136"));
     }
 
     @Test
-    public void deve_buscar_todas_as_empresas() {
+    public void deve_buscar_empresa_por_filtro() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        System.out.println(repository.buscaEmpresa(this.empresa));
+        empresaFind = new Empresa();
+        this.empresaFind.setEmail("fulano@exemplo.com");
+        System.out.println(repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
     @Test
-    public void deve_buscar_empresa_por_campos_predeterminados() {
+    public void deve_buscar_empresa_por_filtros() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        pesquisa = new ArrayList<String>();
-        pesquisa.add("_id");
-        System.out.println(repository.buscaEmpresaPor(pesquisa));
+        empresaFind = new Empresa();
+        this.empresaFind.setProprietario("Fulano");
+        this.empresaFind.setRazaoSocial("Unip");
+        this.empresaFind.setEmail("eu@teste.com.br");
+        System.out.println(repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
     @Test
-    public void deve_buscar_empresa_por_lista_de_campos() {
+    public void deve_buscar_empresas_por_filtro() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        System.out.println(repository.buscaEmpresaPor(empresaFind));
+        empresaFind = new Empresa();
+        this.empresaFind.setProprietario("Alguém");
+        this.empresaFind.setEmail("eu@teste.com.br");
+        System.out.println(repository.buscaEmpresasPorFiltro(empresaFind));
     }
 
     @Test
-    public void deve_pagina_busca_de_empresas() {
+    public void deve_buscar_empresas_por_filtros() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        System.out.println(repository.paginarBuscas(3, 5));
+        empresaFind = new Empresa();
+        this.empresaFind.setProprietario("Alguém");
+        this.empresaFind.setEmail("eu@teste.com.br");
+        System.out.println(repository.buscaEmpresasPorFiltro(empresaFind));
+    }
+
+    // Paging===================================================================================================================
+    @Test
+    public void deve_paginar_busca_de_empresas() {
+        EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
+        System.out.println(repository.paginarBuscas(3, 20));
     }
 }

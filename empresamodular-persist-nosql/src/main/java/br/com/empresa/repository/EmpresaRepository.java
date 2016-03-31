@@ -1,3 +1,21 @@
+/******************************************************************************
+ * Produto: Gestor de Empresas                                                *
+ * Contmatic Phoenix © Desde 1986                                             *
+ * Tecnologia em Softwares de Gestão Contábil, Empresarial e ERP              *
+ * Todos os direitos reservados.                                              *
+ *                                                                            *
+ *                                                                            *
+ *    Histórico:                                                              *
+ *          Data        Programador              Tarefa                       *
+ *          ----------  -----------------        -----------------------------*
+ *   Autor  31/03/2016  william.salerno          Classe criada.        	      *
+ *                                                                            *
+ *   Comentários:                                                             *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *****************************************************************************/
 package br.com.empresa.repository;
 
 import static br.com.contmatic.empresawilliam.assembler.EmpresaAssembler.findToDocumentFilter;
@@ -6,17 +24,12 @@ import static br.com.contmatic.empresawilliam.assembler.EmpresaAssembler.updateT
 import static br.com.contmatic.empresawilliam.assembler.EmpresaObject.empresaToObject;
 import static br.com.contmatic.empresawilliam.assembler.MongoClientDate.codecDate;
 import static br.com.contmatic.empresawilliam.util.ValidationUtil.hasErrors;
-import static br.com.empresa.repository.util.RepositoryUtil.PAGINA;
-import static br.com.empresa.repository.util.RepositoryUtil.manageNumberPages;
-import static com.mongodb.client.model.Projections.fields;
+import static br.com.empresa.repository.util.EmpresaUtil.FieldsList;
+import static br.com.empresa.repository.util.EmpresaUtil.validateCnpj;
 import static com.mongodb.client.model.Projections.include;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.bson.Document;
 
@@ -28,8 +41,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import br.com.contmatic.empresawilliam.Empresa;
-import br.com.contmatic.empresawilliam.util.ValidationUtil;
-import br.com.empresa.repository.util.RepositoryUtil;
 
 /**
  * The Class EmpresaRepository.
@@ -90,16 +101,34 @@ public class EmpresaRepository {
     }
 
     /**
-     * Update empresa.
+     * Update empresas.
+     *
+     * @param cnpjFiltro the cnpj filtro
+     * @param empresa the empresa
+     */
+    public void updateEmpresaPorCnpj(String cnpjFiltro, Empresa empresa) {
+        try {
+            validateCnpj(cnpjFiltro);
+            this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
+            MongoDatabase database = mongoClient.getDatabase(this.db);
+            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            collection.updateOne(new Document("_id", cnpjFiltro), new Document("$set", updateToDocumentFilter(empresa)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mongoClient.close();
+        }
+    }
+
+    /**
+     * Valida um cnpj da empresa, utilizado nos metodos de pesquisa, exclusão e atualização.
      *
      * @param empresaFiltro the empresa filtro
      * @param empresa the empresa
      */
-    public void updateEmpresa(Empresa empresaFiltro, Empresa empresa) {
+
+    public void updateEmpresaPorFiltro(Empresa empresaFiltro, Empresa empresa) {
         try {
-            if (ValidationUtil.hasErrors(empresa)) {
-                throw new Exception("Foi encontrado erro em Empresa.");
-            }
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
@@ -112,20 +141,16 @@ public class EmpresaRepository {
     }
 
     /**
-     * Update empresas.
+     * Update empresas por filtro.
      *
      * @param empresaFiltro the empresa filtro
      * @param empresa the empresa
      */
-    public void updateEmpresas(Empresa empresaFiltro, Empresa empresa) {
+    public void updateEmpresasPorFiltro(Empresa empresaFiltro, Empresa empresa) {
         try {
-            if (ValidationUtil.hasErrors(empresa)) {
-                throw new Exception("Foi encontrado erro em Empresa.");
-            }
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
-            empresa.setRazaoSocial("asdhuahsd");
             collection.updateMany(findToDocumentFilter(empresaFiltro), new Document("$set", updateToDocumentFilter(empresa)));
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,14 +162,15 @@ public class EmpresaRepository {
     /**
      * Remove empresa.
      *
-     * @param empresaFiltro the empresa filtro
+     * @param cnpjFiltro the cnpj filtro
      */
-    public void removeEmpresa(Empresa empresaFiltro) {
+    public void removeEmpresaPorCnpj(String cnpjFiltro) {
         try {
+            validateCnpj(cnpjFiltro);
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
-            collection.deleteOne(new Document("_id", empresaFiltro.getCnpj()));
+            collection.deleteOne(new Document("_id", cnpjFiltro));
         } finally {
             mongoClient.close();
         }
@@ -152,13 +178,31 @@ public class EmpresaRepository {
 
     /**
      * Remove empresas.
+     *
+     * @param empresaFiltro the empresa filtro
      */
-    public void removeEmpresas() {
+    public void removeEmpresaPorFiltro(Empresa empresaFiltro) {
         try {
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
-            collection.deleteMany(new Document());
+            collection.deleteOne(findToDocumentFilter(empresaFiltro));
+        } finally {
+            mongoClient.close();
+        }
+    }
+
+    /**
+     * Remove empresas por filtro.
+     *
+     * @param empresaFiltro the empresa filtro
+     */
+    public void removeEmpresasPorFiltro(Empresa empresaFiltro) {
+        try {
+            this.mongoClient = new MongoClient(this.host, this.port);
+            MongoDatabase database = mongoClient.getDatabase(this.db);
+            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            collection.deleteMany(findToDocumentFilter(empresaFiltro));
         } finally {
             mongoClient.close();
         }
@@ -167,14 +211,15 @@ public class EmpresaRepository {
     /**
      * Busca empresa.
      *
-     * @param empresa the empresa
+     * @param cnpjFiltro the cnpj filtro
      * @return the list
      */
-    public List<Empresa> buscaEmpresa(Empresa empresa) {
+    public List<Empresa> buscaEmpresaPorCnpj(String cnpjFiltro) {
         try {
+            validateCnpj(cnpjFiltro);
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
-            FindIterable<Document> collection = database.getCollection(COLLECTION).find();
+            FindIterable<Document> collection = database.getCollection(COLLECTION).find(new Document("_id", cnpjFiltro));
             final List<Empresa> empresas = new ArrayList<Empresa>();
             collection.forEach(new Block<Document>() {
                 public void apply(final Document document) {
@@ -191,53 +236,43 @@ public class EmpresaRepository {
     /**
      * Busca empresa por.
      *
-     * @param key the key
-     * @return the map
+     * @param empresaFiltro the empresa filtro
+     * @return the list
      */
-    public Map<String, String> buscaEmpresaPor(List<String> key) {
+    public List<Empresa> buscaEmpresaPorFiltro(Empresa empresaFiltro) {
         try {
+            List<Empresa> empresas = new ArrayList<Empresa>();
+            Document filtro = updateToDocumentFilter(empresaFiltro);
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
-            Map<String, String> mapEmpresas = new HashMap<String, String>();
-            FindIterable<Document> collection;
-            List<Integer> is = new ArrayList<>();
-            for(int i = 0 ; i < key.size() ; i++) {
-                is.add(i);
-            }
-            collection = database.getCollection(COLLECTION).find().projection(fields(include(key), include("_id")));
+            FindIterable<Document> collection = database.getCollection(COLLECTION).find(filtro).projection(include(FieldsList(filtro))).limit(1);
             collection.forEach(new Block<Document>() {
                 public void apply(final Document document) {
-                    for(final int i : is) {
-                        mapEmpresas.put(key.get(i), document.getString(key.get(i)));
-                    }
+                    empresas.add(empresaToObject(document));
                 }
             });
-            return mapEmpresas;
-        } finally {
+            return empresas;
+        } finally
+
+        {
             mongoClient.close();
         }
     }
 
     /**
-     * Busca empresa por.
+     * Busca empresas por filtro.
      *
      * @param empresaFiltro the empresa filtro
      * @return the list
      */
-    public List<Empresa> buscaEmpresaPor(Empresa empresaFiltro) {
+    public List<Empresa> buscaEmpresasPorFiltro(Empresa empresaFiltro) {
         try {
             List<Empresa> empresas = new ArrayList<Empresa>();
-            Document doc = new Document(updateToDocumentFilter(empresaFiltro));
+            Document filtro = updateToDocumentFilter(empresaFiltro);
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
-            Set<String> setKeys = doc.keySet();
-            List<String> listKeys = new ArrayList<String>();
-            Iterator<String> itr = setKeys.iterator();
-            while (itr.hasNext()) {
-                listKeys.add(itr.next());
-            }
             FindIterable<Document> collection;
-            collection = database.getCollection(COLLECTION).find().projection(fields(include("_id"), include(listKeys)));
+            collection = database.getCollection(COLLECTION).find(filtro).projection(include(FieldsList(filtro)));
             collection.forEach(new Block<Document>() {
                 public void apply(final Document document) {
                     empresas.add(empresaToObject(document));
@@ -254,7 +289,7 @@ public class EmpresaRepository {
     /**
      * Paginar buscas.
      *
-     * @param empresaFiltro the empresa filtro
+     * @param numeroPagina the numero pagina
      * @param elementosPorPagina the elementos por pagina
      * @return the list
      */
@@ -264,7 +299,7 @@ public class EmpresaRepository {
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
             FindIterable<Document> collection;
-            collection = database.getCollection(COLLECTION).find().skip(numeroPagina * (elementosPorPagina - 1)).limit(elementosPorPagina).sort(new Document("cnpj", 1));
+            collection = database.getCollection(COLLECTION).find().skip(numeroPagina * (elementosPorPagina - 1)).limit(elementosPorPagina).sort(new Document("_id", 1));
             collection.forEach(new Block<Document>() {
                 public void apply(final Document document) {
                     empresas.add(empresaToObject(document));

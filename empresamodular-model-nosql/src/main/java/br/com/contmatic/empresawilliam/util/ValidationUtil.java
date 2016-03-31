@@ -1,3 +1,21 @@
+/******************************************************************************
+ * Produto: Gestor de Empresas                                                *
+ * Contmatic Phoenix © Desde 1986                                             *
+ * Tecnologia em Softwares de Gestão Contábil, Empresarial e ERP              *
+ * Todos os direitos reservados.                                              *
+ *                                                                            *
+ *                                                                            *
+ *    Histórico:                                                              *
+ *          Data        Programador              Tarefa                       *
+ *          ----------  -----------------        -----------------------------*
+ *   Autor  31/03/2016  william.salerno          Classe criada.        	      *
+ *                                                                            *
+ *   Comentários:                                                             *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *****************************************************************************/
 package br.com.contmatic.empresawilliam.util;
 
 import java.util.Set;
@@ -62,13 +80,19 @@ public final class ValidationUtil {
         return false;
 
     }
-    
+
+    /**
+     * Has errors.
+     *
+     * @param obj the obj
+     * @return true, if successful
+     */
     public static boolean hasErrors(Object obj) {
         if (obj != null) {
             ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
             Validator validator = factory.getValidator();
             Set<ConstraintViolation<Object>> errors = validator.validate(obj);
-            if(errors.size() > 0){
+            if (errors.size() > 0) {
                 return true;
             }
         }

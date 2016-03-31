@@ -1,3 +1,21 @@
+/******************************************************************************
+ * Produto: Gestor de Empresas                                                *
+ * Contmatic Phoenix © Desde 1986                                             *
+ * Tecnologia em Softwares de Gestão Contábil, Empresarial e ERP              *
+ * Todos os direitos reservados.                                              *
+ *                                                                            *
+ *                                                                            *
+ *    Histórico:                                                              *
+ *          Data        Programador              Tarefa                       *
+ *          ----------  -----------------        -----------------------------*
+ *   Autor  31/03/2016  william.salerno          Classe criada.        	      *
+ *                                                                            *
+ *   Comentários:                                                             *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *****************************************************************************/
 package br.com.empresa.repository.test;
 
 import static br.com.contmatic.empresawilliam.EnderecoType.COMERCIAL;
@@ -20,15 +38,24 @@ import br.com.contmatic.empresawilliam.Telefone;
 import br.com.contmatic.empresawilliam.assembler.EmpresaAssembler;
 
 /**
- * @author William
+ * The Class EmpresaDocumentTest.
  *
+ * @author William
  */
 public class EmpresaDocumentTest {
 
+    /** The empresa. */
     private Empresa empresa = new Empresa();
+
+    /** The enderecos. */
     Set<Endereco> enderecos = new HashSet<Endereco>();
+
+    /** The telefones. */
     Set<Telefone> telefones = new HashSet<Telefone>();
 
+    /**
+     * Deve_retornar_valores_corretos.
+     */
     @Test
     public void deve_retornar_valores_corretos() {
         Endereco endereco1 = new Endereco();
@@ -115,6 +142,9 @@ public class EmpresaDocumentTest {
         assertEquals(empresa.getSite(), empresaDoc.get("site"));
     }
 
+    /**
+     * Deve_aceitar_null_se_empresa_e_null.
+     */
     @Test
     public void deve_aceitar_null_se_empresa_e_null() {
         assertNull(EmpresaAssembler.toDocument(null));

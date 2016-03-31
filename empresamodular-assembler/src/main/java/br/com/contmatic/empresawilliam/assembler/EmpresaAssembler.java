@@ -1,3 +1,21 @@
+/******************************************************************************
+ * Produto: Gestor de Empresas                                                *
+ * Contmatic Phoenix © Desde 1986                                             *
+ * Tecnologia em Softwares de Gestão Contábil, Empresarial e ERP              *
+ * Todos os direitos reservados.                                              *
+ *                                                                            *
+ *                                                                            *
+ *    Histórico:                                                              *
+ *          Data        Programador              Tarefa                       *
+ *          ----------  -----------------        -----------------------------*
+ *   Autor  31/03/2016  william.salerno          Classe criada.        	      *
+ *                                                                            *
+ *   Comentários:                                                             *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *****************************************************************************/
 package br.com.contmatic.empresawilliam.assembler;
 
 import java.util.Date;
@@ -75,14 +93,11 @@ public final class EmpresaAssembler {
             return null;
         }
         Document empresaDoc = new Document();
-        if (empresa.getCnpj() != null) {
-            empresaDoc.append("_id", empresa.getCnpj());
+        if (empresa.getRazaoSocial() != null) {
+            empresaDoc.append("razaoSocial", empresa.getRazaoSocial());
         }
         if (empresa.getProprietario() != null) {
             empresaDoc.append("proprietario", empresa.getProprietario());
-        }
-        if (empresa.getRazaoSocial() != null) {
-            empresaDoc.append("razaoSocial", empresa.getRazaoSocial());
         }
         if (empresa.getSite() != null) {
             empresaDoc.append("site", empresa.getSite());
@@ -116,33 +131,32 @@ public final class EmpresaAssembler {
         Document empresaDoc = new Document();
         if (empresa.getCnpj() != null) {
             empresaDoc.append("_id", empresa.getCnpj());
-        } else {
-            if (empresa.getProprietario() != null) {
-                empresaDoc.append("proprietario", empresa.getProprietario());
-            }
-            if (empresa.getRazaoSocial() != null) {
-                empresaDoc.append("razaoSocial", empresa.getRazaoSocial());
-            }
-            if (empresa.getSite() != null) {
-                empresaDoc.append("site", empresa.getSite());
-            }
-            if (empresa.getEmail() != null) {
-                empresaDoc.append("email", empresa.getEmail());
-            }
-            if (empresa.getEnderecos() != null) {
-                empresaDoc.append("enderecos", EnderecoAssembler.toDocument(empresa.getEnderecos()));
-            }
-            if (empresa.getTelefones() != null) {
-                empresaDoc.append("telefones", TelefoneAssembler.toDocument(empresa.getTelefones()));
-            }
-            if (empresa.getDataDeCriacao() != null) {
-                Date dataCriacao = converteParaDate(empresa.getDataDeCriacao());
-                empresaDoc.append("dataCriacao", dataCriacao);
-            }
-            if (empresa.getDataDeAlteracao() != null) {
-                Date dataAlteracao = converteParaDate(empresa.getDataDeAlteracao());
-                empresaDoc.append("dataAlteracao", dataAlteracao);
-            }
+        }
+        if (empresa.getProprietario() != null) {
+            empresaDoc.append("proprietario", empresa.getProprietario());
+        }
+        if (empresa.getRazaoSocial() != null) {
+            empresaDoc.append("razaoSocial", empresa.getRazaoSocial());
+        }
+        if (empresa.getSite() != null) {
+            empresaDoc.append("site", empresa.getSite());
+        }
+        if (empresa.getEmail() != null) {
+            empresaDoc.append("email", empresa.getEmail());
+        }
+        if (empresa.getEnderecos() != null) {
+            empresaDoc.append("enderecos", EnderecoAssembler.toDocument(empresa.getEnderecos()));
+        }
+        if (empresa.getTelefones() != null) {
+            empresaDoc.append("telefones", TelefoneAssembler.toDocument(empresa.getTelefones()));
+        }
+        if (empresa.getDataDeCriacao() != null) {
+            Date dataCriacao = converteParaDate(empresa.getDataDeCriacao());
+            empresaDoc.append("dataCriacao", dataCriacao);
+        }
+        if (empresa.getDataDeAlteracao() != null) {
+            Date dataAlteracao = converteParaDate(empresa.getDataDeAlteracao());
+            empresaDoc.append("dataAlteracao", dataAlteracao);
         }
         return empresaDoc;
     }
