@@ -19,14 +19,11 @@
 package br.com.contmatic.empresawilliam.assembler;
 
 import java.util.Date;
-import java.util.Set;
 
 import org.bson.Document;
 import org.joda.time.LocalDate;
 
 import br.com.contmatic.empresawilliam.Empresa;
-import br.com.contmatic.empresawilliam.Endereco;
-import br.com.contmatic.empresawilliam.Telefone;
 
 /**
  * The Class EmpresaObject.
@@ -66,9 +63,7 @@ public class EmpresaObject {
      * @return the empresa
      */
     public static Empresa empresaToObject(Document document) {
-        if (document == null) {
-            return null;
-        } else {
+        if (document != null) {
             Empresa empresa = new Empresa();
             empresa.setCnpj(document.getString("_id"));
             empresa.setProprietario(document.getString("proprietario"));
@@ -85,6 +80,7 @@ public class EmpresaObject {
             empresa.isPesquisaOff();
             return empresa;
         }
+        return null;
 
     }
 }

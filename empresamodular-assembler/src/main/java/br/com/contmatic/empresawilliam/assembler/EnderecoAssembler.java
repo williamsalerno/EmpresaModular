@@ -48,9 +48,12 @@ public class EnderecoAssembler {
      * @return the document
      */
     public static Document toDocument(Endereco endereco) {
-        if (endereco != null) {
-            Document enderecoDoc = new Document("tipoLogradouro", endereco.getTipoLogradouro()).append("nomeLogradouro", endereco.getNomeLogradouro())
-                    .append("numeroEndereco", endereco.getNumeroEndereco()).append("cep", endereco.getCep()).append("tipoEndereco", endereco.getTipoEndereco().name());
+        if (endereco != null && endereco.getTipoEndereco() != null) {
+            Document enderecoDoc = new Document("tipoLogradouro", endereco.getTipoLogradouro())
+                    .append("nomeLogradouro", endereco.getNomeLogradouro())
+                    .append("numeroEndereco", endereco.getNumeroEndereco())
+                    .append("cep", endereco.getCep())
+                    .append("tipoEndereco", endereco.getTipoEndereco().name());
             return enderecoDoc;
         }
         return null;
@@ -62,7 +65,7 @@ public class EnderecoAssembler {
      * @param enderecos the enderecos
      * @return the list
      */
-    public static List<Document> toDocument(Set<Endereco> enderecos) {
+    public static List<Document> enderecoToDocument(Set<Endereco> enderecos) {
         if (enderecos != null) {
             List<Document> lista = new ArrayList<Document>();
             for(Endereco endereco : enderecos) {
@@ -119,10 +122,13 @@ public class EnderecoAssembler {
      * @return the endereco type
      */
     public static EnderecoType tipoEndereco(Document doc) {
-        if (doc.get("tipoEndereco").equals(EnderecoType.COMERCIAL.name())) {
-            return EnderecoType.COMERCIAL;
-        } else {
-            return EnderecoType.RESIDENCIAL;
+        if (doc != null) {
+            if (doc.get("tipoEndereco").equals(EnderecoType.COMERCIAL.name())) {
+                return EnderecoType.COMERCIAL;
+            } else {
+                return EnderecoType.RESIDENCIAL;
+            }
         }
+        return null;
     }
 }

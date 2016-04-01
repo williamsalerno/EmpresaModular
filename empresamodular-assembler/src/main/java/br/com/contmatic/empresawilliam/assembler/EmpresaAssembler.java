@@ -18,6 +18,9 @@
  *****************************************************************************/
 package br.com.contmatic.empresawilliam.assembler;
 
+import static br.com.contmatic.empresawilliam.assembler.EnderecoAssembler.enderecoToDocument;
+import static br.com.contmatic.empresawilliam.assembler.TelefoneAssembler.telefoneToDocument;
+
 import java.util.Date;
 
 import org.bson.Document;
@@ -74,9 +77,15 @@ public final class EmpresaAssembler {
             Date dataCriacao = converteParaDate(empresa.getDataDeCriacao());
             Date dataAlteracao = converteParaDate(empresa.getDataDeAlteracao());
             Document empresaDoc = new Document();
-            empresaDoc.append("_id", empresa.getCnpj()).append("razaoSocial", empresa.getRazaoSocial()).append("proprietario", empresa.getProprietario()).append("email", empresa.getEmail())
-                    .append("site", empresa.getSite()).append("enderecos", EnderecoAssembler.toDocument(empresa.getEnderecos()))
-                    .append("telefones", TelefoneAssembler.toDocument(empresa.getTelefones())).append("dataCriacao", dataCriacao).append("dataAlteracao", dataAlteracao);
+            empresaDoc.append("_id", empresa.getCnpj())
+            .append("razaoSocial", empresa.getRazaoSocial())
+            .append("proprietario", empresa.getProprietario())
+            .append("email", empresa.getEmail())
+            .append("site", empresa.getSite())
+            .append("enderecos", enderecoToDocument(empresa.getEnderecos()))
+            .append("telefones", telefoneToDocument(empresa.getTelefones()))
+            .append("dataCriacao", dataCriacao)
+            .append("dataAlteracao", dataAlteracao);
             return empresaDoc;
         }
         return null;
@@ -106,10 +115,10 @@ public final class EmpresaAssembler {
             empresaDoc.append("email", empresa.getEmail());
         }
         if (empresa.getEnderecos() != null) {
-            empresaDoc.append("enderecos", EnderecoAssembler.toDocument(empresa.getEnderecos()));
+            empresaDoc.append("enderecos", enderecoToDocument(empresa.getEnderecos()));
         }
         if (empresa.getTelefones() != null) {
-            empresaDoc.append("telefones", TelefoneAssembler.toDocument(empresa.getTelefones()));
+            empresaDoc.append("telefones", telefoneToDocument(empresa.getTelefones()));
         }
         if (empresa.getDataDeAlteracao() != null) {
             Date dataAlteracao = converteParaDate(empresa.getDataDeAlteracao());
@@ -145,10 +154,10 @@ public final class EmpresaAssembler {
             empresaDoc.append("email", empresa.getEmail());
         }
         if (empresa.getEnderecos() != null) {
-            empresaDoc.append("enderecos", EnderecoAssembler.toDocument(empresa.getEnderecos()));
+            empresaDoc.append("enderecos", enderecoToDocument(empresa.getEnderecos()));
         }
         if (empresa.getTelefones() != null) {
-            empresaDoc.append("telefones", TelefoneAssembler.toDocument(empresa.getTelefones()));
+            empresaDoc.append("telefones", telefoneToDocument(empresa.getTelefones()));
         }
         if (empresa.getDataDeCriacao() != null) {
             Date dataCriacao = converteParaDate(empresa.getDataDeCriacao());

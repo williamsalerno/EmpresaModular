@@ -268,6 +268,6 @@ public class EmpresaRepositoryTest {
     @Test
     public void deve_paginar_busca_de_empresas() {
         EmpresaRepository repository = new EmpresaRepository("localhost", 27017, "empresa");
-        System.out.println(repository.paginarBuscas(3, 20));
+        System.out.println(repository.paginarBuscas(-3, 2));
     }
 }

@@ -26,6 +26,7 @@ import static br.com.contmatic.empresawilliam.assembler.MongoClientDate.codecDat
 import static br.com.contmatic.empresawilliam.util.ValidationUtil.hasErrors;
 import static br.com.empresa.repository.util.EmpresaUtil.FieldsList;
 import static br.com.empresa.repository.util.EmpresaUtil.validateCnpj;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.mongodb.client.model.Projections.include;
 
 import java.util.ArrayList;
@@ -84,17 +85,16 @@ public class EmpresaRepository {
      */
     public void saveEmpresa(Empresa empresa) {
         try {
+            checkNotNull(empresa, "A empresa não pode ser null.");
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             if (hasErrors(empresa)) {
-                throw new Exception("Foi encontrado erro em Empresa.");
+                throw new IllegalArgumentException("Foi encontrado erro em Empresa.");
             }
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
             collection.insertOne(toDocument(empresa));
         } catch (MongoWriteException e) {
             throw new IllegalStateException("Empresa já existe.");
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             mongoClient.close();
         }
@@ -108,13 +108,12 @@ public class EmpresaRepository {
      */
     public void updateEmpresaPorCnpj(String cnpjFiltro, Empresa empresa) {
         try {
+            checkNotNull(empresa, "A empresa não pode ser null.");
             validateCnpj(cnpjFiltro);
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
             collection.updateOne(new Document("_id", cnpjFiltro), new Document("$set", updateToDocumentFilter(empresa)));
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             mongoClient.close();
         }
@@ -129,12 +128,12 @@ public class EmpresaRepository {
 
     public void updateEmpresaPorFiltro(Empresa empresaFiltro, Empresa empresa) {
         try {
+            checkNotNull(empresa, "A empresa não pode ser null.");
+            checkNotNull(empresaFiltro, "O filtro não pode ser null.");
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
             collection.updateOne(findToDocumentFilter(empresaFiltro), new Document("$set", updateToDocumentFilter(empresa)));
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             mongoClient.close();
         }
@@ -148,12 +147,12 @@ public class EmpresaRepository {
      */
     public void updateEmpresasPorFiltro(Empresa empresaFiltro, Empresa empresa) {
         try {
+            checkNotNull(empresa, "A empresa não pode ser null.");
+            checkNotNull(empresaFiltro, "O filtro não pode ser null.");
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
             collection.updateMany(findToDocumentFilter(empresaFiltro), new Document("$set", updateToDocumentFilter(empresa)));
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             mongoClient.close();
         }
@@ -183,6 +182,7 @@ public class EmpresaRepository {
      */
     public void removeEmpresaPorFiltro(Empresa empresaFiltro) {
         try {
+            checkNotNull(empresaFiltro, "O filtro não pode ser null.");
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
@@ -199,6 +199,7 @@ public class EmpresaRepository {
      */
     public void removeEmpresasPorFiltro(Empresa empresaFiltro) {
         try {
+            checkNotNull(empresaFiltro, "O filtro não pode ser null.");
             this.mongoClient = new MongoClient(this.host, this.port);
             MongoDatabase database = mongoClient.getDatabase(this.db);
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
@@ -241,6 +242,7 @@ public class EmpresaRepository {
      */
     public List<Empresa> buscaEmpresaPorFiltro(Empresa empresaFiltro) {
         try {
+            checkNotNull(empresaFiltro, "O filtro não pode ser null.");
             List<Empresa> empresas = new ArrayList<Empresa>();
             Document filtro = updateToDocumentFilter(empresaFiltro);
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
@@ -252,9 +254,7 @@ public class EmpresaRepository {
                 }
             });
             return empresas;
-        } finally
-
-        {
+        } finally {
             mongoClient.close();
         }
     }
@@ -267,6 +267,7 @@ public class EmpresaRepository {
      */
     public List<Empresa> buscaEmpresasPorFiltro(Empresa empresaFiltro) {
         try {
+            checkNotNull(empresaFiltro, "O filtro não pode ser null.");
             List<Empresa> empresas = new ArrayList<Empresa>();
             Document filtro = updateToDocumentFilter(empresaFiltro);
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
@@ -279,9 +280,7 @@ public class EmpresaRepository {
                 }
             });
             return empresas;
-        } finally
-
-        {
+        } finally {
             mongoClient.close();
         }
     }
@@ -297,6 +296,12 @@ public class EmpresaRepository {
         try {
             List<Empresa> empresas = new ArrayList<Empresa>();
             this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
+            if (elementosPorPagina == 0) {
+                throw new IllegalArgumentException("Elementos por página devem ser diferentes de 0.");
+            }
+            // if (numeroPagina <= 0) {
+            // numeroPagina = 1;
+            // }
             MongoDatabase database = mongoClient.getDatabase(this.db);
             FindIterable<Document> collection;
             collection = database.getCollection(COLLECTION).find().skip(numeroPagina * (elementosPorPagina - 1)).limit(elementosPorPagina).sort(new Document("_id", 1));
@@ -306,9 +311,7 @@ public class EmpresaRepository {
                 }
             });
             return empresas;
-        } finally
-
-        {
+        } finally {
             mongoClient.close();
         }
     }

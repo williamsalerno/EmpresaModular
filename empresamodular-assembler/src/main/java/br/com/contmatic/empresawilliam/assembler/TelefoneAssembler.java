@@ -48,7 +48,7 @@ public class TelefoneAssembler {
      * @return the document
      */
     public static Document toDocument(Telefone telefone) {
-        if (telefone != null) {
+        if (telefone != null && telefone.getTipoTelefone() != null) {
             Document telefoneDoc = new Document("ddd", telefone.getDdd()).append("telefone", telefone.getTelefone()).append("tipoTelefone", telefone.getTipoTelefone().name());
             return telefoneDoc;
         }
@@ -62,15 +62,14 @@ public class TelefoneAssembler {
      * @return the telefone
      */
     public static Telefone documentToTelefone(Document document) {
-        Telefone telefone = new Telefone();
-        if (document == null) {
-            return null;
-        } else {
+        if (document != null) {
+            Telefone telefone = new Telefone();
             telefone.setTelefone(document.getString("telefone"));
             telefone.setDdd(document.getInteger("ddd"));
             telefone.setTipoTelefone(tipoTelefone(document));
             return telefone;
         }
+        return null;
     }
 
     /**
@@ -79,7 +78,7 @@ public class TelefoneAssembler {
      * @param telefones the telefones
      * @return the list
      */
-    public static List<Document> toDocument(Set<Telefone> telefones) {
+    public static List<Document> telefoneToDocument(Set<Telefone> telefones) {
         if (telefones != null) {
             List<Document> lista = new ArrayList<Document>();
             for(Telefone telefone : telefones) {
@@ -97,8 +96,8 @@ public class TelefoneAssembler {
      * @return the set
      */
     public static Set<Telefone> toTelefone(List<Document> listaTelefone) {
-        Set<Telefone> telefones = new HashSet<Telefone>();
         if (listaTelefone != null) {
+            Set<Telefone> telefones = new HashSet<Telefone>();
             for(Document doc : listaTelefone) {
                 telefones.add(documentToTelefone(doc));
             }
@@ -114,11 +113,14 @@ public class TelefoneAssembler {
      * @return the telefone type
      */
     public static TelefoneType tipoTelefone(Document doc) {
-        if (doc.get("tipoTelefone").equals(TelefoneType.CELULAR.name())) {
-            return TelefoneType.CELULAR;
-        } else {
-            return TelefoneType.FIXO;
+        if (doc != null) {
+            if (doc.get("tipoTelefone").equals(TelefoneType.CELULAR.name())) {
+                return TelefoneType.CELULAR;
+            } else {
+                return TelefoneType.FIXO;
+            }
         }
+        return null;
 
     }
 }
