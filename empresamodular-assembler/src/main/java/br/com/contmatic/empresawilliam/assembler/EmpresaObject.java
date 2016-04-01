@@ -18,12 +18,19 @@
  *****************************************************************************/
 package br.com.contmatic.empresawilliam.assembler;
 
+import static br.com.contmatic.empresawilliam.assembler.EnderecoAssembler.toEndereco;
+import static br.com.contmatic.empresawilliam.assembler.TelefoneAssembler.toTelefone;
+
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import org.bson.Document;
 import org.joda.time.LocalDate;
 
 import br.com.contmatic.empresawilliam.Empresa;
+import br.com.contmatic.empresawilliam.Endereco;
+import br.com.contmatic.empresawilliam.Telefone;
 
 /**
  * The Class EmpresaObject.
@@ -70,8 +77,8 @@ public class EmpresaObject {
             empresa.setRazaoSocial(document.getString("razaoSocial"));
             empresa.setEmail(document.getString("email"));
             empresa.setSite(document.getString("site"));
-            // empresa.setTelefones((Set<Telefone>) document.get("telefones"));
-            // empresa.setEnderecos((Set<Endereco>) document.get("enderecos"));
+            empresa.setTelefones(toTelefone((List<Document>) document.get("telefones")));
+            empresa.setEnderecos(toEndereco((List<Document>) document.get("enderecos")));
             empresa.isPesquisa();
             empresa.setDataDeCriacao(converteParaLocalDate(document, "dataCriacao"));
             if (document.get("dataAlteracao") != null) {
