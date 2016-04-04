@@ -23,14 +23,11 @@ import static br.com.contmatic.empresawilliam.assembler.TelefoneAssembler.toTele
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.bson.Document;
 import org.joda.time.LocalDate;
 
 import br.com.contmatic.empresawilliam.Empresa;
-import br.com.contmatic.empresawilliam.Endereco;
-import br.com.contmatic.empresawilliam.Telefone;
 
 /**
  * The Class EmpresaObject.
