@@ -24,9 +24,11 @@ import java.util.List;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runners.MethodSorters;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -41,6 +43,7 @@ import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
  *
  * @author William
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmpresaRepositoryTest {
 
     private Empresa empresa;

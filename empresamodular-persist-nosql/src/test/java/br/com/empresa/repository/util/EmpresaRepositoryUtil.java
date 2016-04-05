@@ -24,7 +24,6 @@ public class EmpresaRepositoryUtil {
     private static final int LISTA_ERROS = 0;
 
     private EmpresaRepositoryUtil() {
-
     }
 
     public static void validateCnpj(String cnpj) {

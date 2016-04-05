@@ -66,6 +66,7 @@ public class EmpresaObject {
      * @param document the document
      * @return the empresa
      */
+    @SuppressWarnings("unchecked")
     public static Empresa empresaToObject(Document document) {
         if (document != null) {
             Empresa empresa = new Empresa();

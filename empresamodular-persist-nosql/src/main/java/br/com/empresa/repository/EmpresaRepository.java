@@ -250,9 +250,7 @@ public class EmpresaRepository {
      */
     public List<Empresa> buscasPaginadas(int numeroPagina, int elementosPorPagina) {
         try {
-            if (elementosPorPagina == 0) {
-                throw new IllegalArgumentException("Elementos por página devem ser diferentes de 0.");
-            }
+            checkArgument(elementosPorPagina != 0, "Elementos por página deve ser diferente de 0.");
             this.collection = getDb(connectDb(), this.db).getCollection(COLLECTION).find().skip(elementosPorPagina * (numeroPagina - 1)).limit(elementosPorPagina).sort(new Document("_id", 1));
             return iterateCollection(this.collection);
         } finally {

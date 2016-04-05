@@ -54,18 +54,6 @@ public final class EmpresaAssembler {
         return null;
     }
 
-    // public static List<Object> valuesEmpresa(Empresa empresaFind, Document
-    // doc) {
-    // Set<String> keys = new HashSet<>();
-    // keys = doc.keySet();
-    // List<Object> values = new ArrayList<>();
-    // Iterator<String> itr = keys.iterator();
-    // while (itr.hasNext()) {
-    // values.add(doc.get(itr.next()));
-    // }
-    // return values;
-    // }
-
     /**
      * To document.
      *
