@@ -21,25 +21,24 @@ package br.com.empresa.repository;
 import static br.com.contmatic.empresawilliam.assembler.EmpresaAssembler.findToDocumentFilter;
 import static br.com.contmatic.empresawilliam.assembler.EmpresaAssembler.toDocument;
 import static br.com.contmatic.empresawilliam.assembler.EmpresaAssembler.updateToDocumentFilter;
-import static br.com.contmatic.empresawilliam.assembler.EmpresaObject.empresaToObject;
 import static br.com.contmatic.empresawilliam.assembler.MongoClientDate.codecDate;
 import static br.com.contmatic.empresawilliam.util.ValidationUtil.hasErrors;
-import static br.com.empresa.repository.util.EmpresaUtil.FieldsList;
-import static br.com.empresa.repository.util.EmpresaUtil.validateCnpj;
+import static br.com.empresa.repository.util.EmpresaRepositoryUtil.FieldsList;
+import static br.com.empresa.repository.util.EmpresaRepositoryUtil.getDb;
+import static br.com.empresa.repository.util.EmpresaRepositoryUtil.iterateCollection;
+import static br.com.empresa.repository.util.EmpresaRepositoryUtil.validateCnpj;
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.mongodb.client.model.Projections.include;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
 
-import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 
 import br.com.contmatic.empresawilliam.Empresa;
 
@@ -62,8 +61,7 @@ public class EmpresaRepository {
     /** The Constant COLLECTION. */
     public static final String COLLECTION = "empresa";
 
-    /** The mongo client. */
-    private MongoClient mongoClient;
+    private FindIterable<Document> collection;
 
     /**
      * Instantiates a new empresa repository.
@@ -85,18 +83,14 @@ public class EmpresaRepository {
      */
     public void saveEmpresa(Empresa empresa) {
         try {
-            this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             checkNotNull(empresa, "A empresa não pode ser null.");
-            if (hasErrors(empresa)) {
-                throw new IllegalArgumentException("Foi encontrado erro em Empresa.");
-            }
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            checkArgument(!hasErrors(empresa), "Foi encontrado erro em Empresa.");
+            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
             collection.insertOne(toDocument(empresa));
         } catch (MongoWriteException e) {
             throw new IllegalStateException("Empresa já existe.");
         } finally {
-            mongoClient.close();
+            connectDb().close();
         }
     }
 
@@ -108,14 +102,12 @@ public class EmpresaRepository {
      */
     public void updateEmpresaPorCnpj(String cnpjFiltro, Empresa empresa) {
         try {
-            this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             validateCnpj(cnpjFiltro);
             checkNotNull(empresa, "A empresa não pode ser null.");
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
             collection.updateOne(new Document("_id", cnpjFiltro), new Document("$set", updateToDocumentFilter(empresa)));
         } finally {
-            mongoClient.close();
+            connectDb().close();
         }
     }
 
@@ -128,14 +120,12 @@ public class EmpresaRepository {
 
     public void updateEmpresaPorFiltro(Empresa empresaFiltro, Empresa empresa) {
         try {
-            this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
             checkNotNull(empresa, "A empresa não pode ser null.");
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
             collection.updateOne(findToDocumentFilter(empresaFiltro), new Document("$set", updateToDocumentFilter(empresa)));
         } finally {
-            mongoClient.close();
+            connectDb().close();
         }
     }
 
@@ -147,14 +137,12 @@ public class EmpresaRepository {
      */
     public void updateEmpresasPorFiltro(Empresa empresaFiltro, Empresa empresa) {
         try {
-            this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
             checkNotNull(empresa, "A empresa não pode ser null.");
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
             collection.updateMany(findToDocumentFilter(empresaFiltro), new Document("$set", updateToDocumentFilter(empresa)));
         } finally {
-            mongoClient.close();
+            connectDb().close();
         }
     }
 
@@ -165,13 +153,11 @@ public class EmpresaRepository {
      */
     public void removeEmpresaPorCnpj(String cnpjFiltro) {
         try {
-            this.mongoClient = new MongoClient(this.host, this.port);
             validateCnpj(cnpjFiltro);
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
             collection.deleteOne(new Document("_id", cnpjFiltro));
         } finally {
-            mongoClient.close();
+            connectDb().close();
         }
     }
 
@@ -182,13 +168,11 @@ public class EmpresaRepository {
      */
     public void removeEmpresaPorFiltro(Empresa empresaFiltro) {
         try {
-            this.mongoClient = new MongoClient(this.host, this.port);
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
             collection.deleteOne(findToDocumentFilter(empresaFiltro));
         } finally {
-            mongoClient.close();
+            connectDb().close();
         }
     }
 
@@ -199,13 +183,11 @@ public class EmpresaRepository {
      */
     public void removeEmpresasPorFiltro(Empresa empresaFiltro) {
         try {
-            this.mongoClient = new MongoClient(this.host, this.port);
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            MongoCollection<Document> collection = database.getCollection(COLLECTION);
+            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
             collection.deleteMany(findToDocumentFilter(empresaFiltro));
         } finally {
-            mongoClient.close();
+            connectDb().close();
         }
     }
 
@@ -217,19 +199,11 @@ public class EmpresaRepository {
      */
     public List<Empresa> buscaEmpresaPorCnpj(String cnpjFiltro) {
         try {
-            this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             validateCnpj(cnpjFiltro);
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            FindIterable<Document> collection = database.getCollection(COLLECTION).find(new Document("_id", cnpjFiltro));
-            final List<Empresa> empresas = new ArrayList<Empresa>();
-            collection.forEach(new Block<Document>() {
-                public void apply(final Document document) {
-                    empresas.add(empresaToObject(document));
-                }
-            });
-            return empresas;
+            this.collection = getDb(connectDb(), this.db).getCollection(COLLECTION).find(new Document("_id", cnpjFiltro));
+            return iterateCollection(this.collection);
         } finally {
-            mongoClient.close();
+            connectDb().close();
         }
 
     }
@@ -242,20 +216,12 @@ public class EmpresaRepository {
      */
     public List<Empresa> buscaEmpresaPorFiltro(Empresa empresaFiltro) {
         try {
-            this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
-            List<Empresa> empresas = new ArrayList<Empresa>();
-            Document filtro = updateToDocumentFilter(empresaFiltro);
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            FindIterable<Document> collection = database.getCollection(COLLECTION).find(filtro).projection(include(FieldsList(filtro))).limit(1);
-            collection.forEach(new Block<Document>() {
-                public void apply(final Document document) {
-                    empresas.add(empresaToObject(document));
-                }
-            });
-            return empresas;
+            this.collection = getDb(connectDb(), this.db).getCollection(COLLECTION).find(updateToDocumentFilter(empresaFiltro)).projection(include(FieldsList(updateToDocumentFilter(empresaFiltro))))
+                    .limit(1);
+            return iterateCollection(this.collection);
         } finally {
-            mongoClient.close();
+            connectDb().close();
         }
     }
 
@@ -267,21 +233,11 @@ public class EmpresaRepository {
      */
     public List<Empresa> buscaEmpresasPorFiltro(Empresa empresaFiltro) {
         try {
-            this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
-            List<Empresa> empresas = new ArrayList<Empresa>();
-            Document filtro = updateToDocumentFilter(empresaFiltro);
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            FindIterable<Document> collection;
-            collection = database.getCollection(COLLECTION).find(filtro).projection(include(FieldsList(filtro)));
-            collection.forEach(new Block<Document>() {
-                public void apply(final Document document) {
-                    empresas.add(empresaToObject(document));
-                }
-            });
-            return empresas;
+            this.collection = getDb(connectDb(), this.db).getCollection(COLLECTION).find(updateToDocumentFilter(empresaFiltro)).projection(include(FieldsList(updateToDocumentFilter(empresaFiltro))));
+            return iterateCollection(this.collection);
         } finally {
-            mongoClient.close();
+            connectDb().close();
         }
     }
 
@@ -294,22 +250,17 @@ public class EmpresaRepository {
      */
     public List<Empresa> buscasPaginadas(int numeroPagina, int elementosPorPagina) {
         try {
-            this.mongoClient = new MongoClient(this.host + ":" + this.port, codecDate());
             if (elementosPorPagina == 0) {
                 throw new IllegalArgumentException("Elementos por página devem ser diferentes de 0.");
             }
-            List<Empresa> empresas = new ArrayList<Empresa>();
-            MongoDatabase database = mongoClient.getDatabase(this.db);
-            FindIterable<Document> collection;
-            collection = database.getCollection(COLLECTION).find().skip(elementosPorPagina * (numeroPagina - 1)).limit(elementosPorPagina).sort(new Document("_id", 1));
-            collection.forEach(new Block<Document>() {
-                public void apply(final Document document) {
-                    empresas.add(empresaToObject(document));
-                }
-            });
-            return empresas;
+            this.collection = getDb(connectDb(), this.db).getCollection(COLLECTION).find().skip(elementosPorPagina * (numeroPagina - 1)).limit(elementosPorPagina).sort(new Document("_id", 1));
+            return iterateCollection(this.collection);
         } finally {
-            mongoClient.close();
+            connectDb().close();
         }
+    }
+
+    private MongoClient connectDb() {
+        return new MongoClient(this.host + ":" + this.port, codecDate());
     }
 }

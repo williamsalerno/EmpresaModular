@@ -115,7 +115,7 @@ public class EmpresaRepositoryTest {
     // Remove===================================================================================================================
     @Test
     public void deve_remover_empresa_por_cnpj() {
-        this.repository.removeEmpresaPorCnpj("47752365000136");
+        this.repository.removeEmpresaPorCnpj(empresa.getCnpj());
     }
 
     @Test
@@ -343,8 +343,8 @@ public class EmpresaRepositoryTest {
 
     @Test
     public void nao_deve_retornar_a_mesma_empresa_em_outras_paginas() {
-        List<Empresa> empresasBuscaOriginal = this.repository.buscasPaginadas(1, 10);
-        List<Empresa> empresasBuscaComparacao = this.repository.buscasPaginadas(2, 10);
+        List<Empresa> empresasBuscaOriginal = this.repository.buscasPaginadas(1, 10000);
+        List<Empresa> empresasBuscaComparacao = this.repository.buscasPaginadas(2, 10000);
         for(Empresa emp : empresasBuscaOriginal) {
             for(Empresa emp2 : empresasBuscaComparacao) {
                 assertFalse(emp.equals(emp2));

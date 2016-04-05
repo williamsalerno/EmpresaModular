@@ -1,5 +1,6 @@
 package br.com.empresa.repository.util;
 
+import static br.com.contmatic.empresawilliam.assembler.EmpresaObject.empresaToObject;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.ArrayList;
@@ -9,14 +10,20 @@ import java.util.Set;
 
 import org.bson.Document;
 
+import com.mongodb.Block;
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoDatabase;
+
 import br.com.caelum.stella.ValidationMessage;
 import br.com.caelum.stella.validation.CNPJValidator;
+import br.com.contmatic.empresawilliam.Empresa;
 
-public class EmpresaUtil {
+public class EmpresaRepositoryUtil {
 
     private static final int LISTA_ERROS = 0;
 
-    private EmpresaUtil() {
+    private EmpresaRepositoryUtil() {
 
     }
 
@@ -33,7 +40,19 @@ public class EmpresaUtil {
             listKeys.add(itr.next());
         }
         return listKeys;
-
     }
 
+    public static List<Empresa> iterateCollection(FindIterable<Document> collection) {
+        List<Empresa> empresas = new ArrayList<Empresa>();
+        collection.forEach(new Block<Document>() {
+            public void apply(final Document document) {
+                empresas.add(empresaToObject(document));
+            }
+        });
+        return empresas;
+    }
+
+    public static MongoDatabase getDb(MongoClient mongoClient, String db) {
+        return mongoClient.getDatabase(db);
+    }
 }
