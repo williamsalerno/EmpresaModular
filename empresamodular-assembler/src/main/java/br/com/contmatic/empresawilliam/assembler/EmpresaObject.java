@@ -52,7 +52,7 @@ public class EmpresaObject {
      * @return the local date
      */
     public static LocalDate converteParaLocalDate(Document document, String key) {
-        if (document != null) {
+        if (document != null && key != null) {
             Date date = document.getDate(key);
             if (date != null) {
                 return fromDateFields(date);

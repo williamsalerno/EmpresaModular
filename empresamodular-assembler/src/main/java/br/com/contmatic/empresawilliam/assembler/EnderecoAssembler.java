@@ -84,8 +84,8 @@ public class EnderecoAssembler {
      * @return the endereco
      */
     public static Endereco documentToEndereco(Document document) {
-        Endereco endereco = new Endereco();
         if (document != null) {
+            Endereco endereco = new Endereco();
             endereco.setTipoLogradouro(document.getString("tipoLogradouro"));
             endereco.setNomeLogradouro(document.getString("nomeLogradouro"));
             endereco.setNumeroEndereco(document.getInteger("numeroEndereco"));
@@ -103,8 +103,8 @@ public class EnderecoAssembler {
      * @return the set
      */
     public static Set<Endereco> toEndereco(List<Document> listaEndereco) {
-        Set<Endereco> enderecos = new HashSet<Endereco>();
         if (listaEndereco != null) {
+            Set<Endereco> enderecos = new HashSet<Endereco>();
             for(Document doc : listaEndereco) {
                 enderecos.add(documentToEndereco(doc));
             }

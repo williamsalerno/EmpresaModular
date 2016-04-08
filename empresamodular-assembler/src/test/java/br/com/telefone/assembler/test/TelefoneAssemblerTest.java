@@ -21,7 +21,6 @@ import org.junit.Test;
 
 import br.com.contmatic.empresawilliam.Empresa;
 import br.com.contmatic.empresawilliam.Telefone;
-import br.com.contmatic.empresawilliam.assembler.TelefoneAssembler;
 
 public class TelefoneAssemblerTest {
 
@@ -80,7 +79,7 @@ public class TelefoneAssemblerTest {
     @Test
     public void deve_tratar_null_em_tipoTelefone() {
         Telefone telefone = new Telefone();
-        Document telefoneDoc = TelefoneAssembler.telefoneToDocument(telefone);
+        Document telefoneDoc = telefoneToDocument(telefone);
         assertNull(documentToTelefone(telefoneDoc));
     }
 

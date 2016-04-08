@@ -21,6 +21,8 @@ package br.com.contmatic.empresawilliam;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+import static org.joda.time.LocalDate.now;
+import static org.joda.time.format.DateTimeFormat.forPattern;
 
 import java.util.Set;
 
@@ -38,7 +40,6 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import br.com.caelum.stella.bean.validation.CNPJ;
@@ -144,10 +145,6 @@ public class Empresa {
     /** The data de alteracao. */
     @Future(message = "A data de alteração deve ser posterior à data de criação.")
     private LocalDate dataDeAlteracao;
-
-    /** The apelido. */
-    @Pattern(regexp = "\\w{1,8}", message = "Existem Apelidos de Empresas contendo caracteres não permitidos pelo sistema operacional")
-    String apelido;
 
     /** The pesquisa. */
     private boolean pesquisa = false;
@@ -347,7 +344,7 @@ public class Empresa {
      */
     public String converteDataDeCriacao(LocalDate dataDeCriacao) {
         checkNotNull(dataDeCriacao, "A data de criação deve ser preenchida.");
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
+        DateTimeFormatter dtf = forPattern("dd/MM/yyyy");
         return dataDeCriacao.toString(dtf);
     }
 
@@ -359,7 +356,7 @@ public class Empresa {
      */
     public String converteDataDeAlteracao(LocalDate dataDeAlteracao) {
         checkNotNull(dataDeCriacao, "A data de criação deve ser preenchida.");
-        DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
+        DateTimeFormatter dtf = forPattern("dd/MM/yyyy");
         return dataDeAlteracao.toString(dtf);
 
     }
@@ -371,8 +368,10 @@ public class Empresa {
      * @param dataDeCriacao the data de criacao
      */
     public void verificaSeDataDeCriacaoEAnterior(LocalDate dataDeCriacao) {
-        if (pesquisa == false)
-            checkState(!dataDeCriacao.isBefore(LocalDate.now()), "Data de criação informada não pode ser anterior à data atual.");
+        checkNotNull(dataDeCriacao, "A data de criação deve ser preenchida.");
+        if (pesquisa == false) {
+            checkState(!dataDeCriacao.isBefore(now()), "Data de criação informada não pode ser anterior à data atual.");
+        }
     }
 
     /**
@@ -381,7 +380,8 @@ public class Empresa {
      * @param dataDeCriacao the data de criacao
      */
     public void verificaSeDataDeCriacaoEPosterior(LocalDate dataDeCriacao) {
-        checkState(!dataDeCriacao.isAfter(LocalDate.now()), "Data de criação informada não pode ser posterior à data atual.");
+        checkNotNull(dataDeCriacao, "A data de criação deve ser preenchida.");
+        checkState(!dataDeCriacao.isAfter(now()), "Data de criação informada não pode ser posterior à data atual.");
     }
 
     /**
@@ -390,7 +390,9 @@ public class Empresa {
      * @param dataDeAlteracao the data de alteracao
      */
     public void verificaSeDataDeAlteracaoEAnteriorACriacao(LocalDate dataDeAlteracao) {
-        checkState(dataDeAlteracao.isAfter(getDataDeCriacao()), "A data de alteração deve ser posterior à data de criação.");
+        if (dataDeAlteracao != null) {
+            checkState(dataDeAlteracao.isAfter(getDataDeCriacao()), "A data de alteração deve ser posterior à data de criação.");
+        }
     }
 
     // Equals, HashCode e toString

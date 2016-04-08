@@ -18,6 +18,13 @@
  *****************************************************************************/
 package br.com.contmatic.empresawilliam.assembler;
 
+import static com.mongodb.MongoClient.getDefaultCodecRegistry;
+import static com.mongodb.MongoClientOptions.builder;
+import static org.bson.BsonType.DATE_TIME;
+import static org.bson.codecs.configuration.CodecRegistries.fromCodecs;
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,10 +32,8 @@ import java.util.Map;
 import org.bson.BsonType;
 import org.bson.codecs.BsonTypeClassMap;
 import org.bson.codecs.DocumentCodecProvider;
-import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 
-import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 
 /**
@@ -52,11 +57,11 @@ public class MongoClientDate {
      */
     public static MongoClientOptions codecDate() {
         Map<BsonType, Class<?>> replacements = new HashMap<BsonType, Class<?>>();
-        replacements.put(BsonType.DATE_TIME, Date.class);
+        replacements.put(DATE_TIME, Date.class);
         BsonTypeClassMap bsonTypeClassMap = new BsonTypeClassMap(replacements);
         DocumentCodecProvider documentCodecProvider = new DocumentCodecProvider(bsonTypeClassMap);
-        CodecRegistry cr = CodecRegistries.fromRegistries(CodecRegistries.fromCodecs(new DateCodec()), CodecRegistries.fromProviders(documentCodecProvider), MongoClient.getDefaultCodecRegistry());
-        MongoClientOptions option = MongoClientOptions.builder().codecRegistry(cr).build();
+        CodecRegistry cr = fromRegistries(fromCodecs(new DateCodec()), fromProviders(documentCodecProvider), getDefaultCodecRegistry());
+        MongoClientOptions option = builder().codecRegistry(cr).build();
         return option;
     }
 

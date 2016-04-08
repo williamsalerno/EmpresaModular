@@ -495,13 +495,16 @@ public class EmpresaTeste {
         empresa.setDataDeCriacao(dataTesteOntem);
     }
 
-    /**
-     * Nao_deve_aceitar_data alteracao_nulo.
-     */
     @Test
-    public void nao_deve_aceitar_dataAlteracao_nulo() {
+    public void nao_deve_aceitar_dataAlteracao_sem_dataCriacao() {
         thrown.expect(NullPointerException.class);
-        thrown.expectMessage("A data de alteração deve ser preenchida.");
+        thrown.expectMessage("A data de criação deve ser preenchida.");
+        empresa.setDataDeCriacao(null);
+        empresa.setDataDeAlteracao(null);
+    }
+
+    @Test
+    public void deve_aceitar_dataAlteracao_nulo() {
         empresa.setDataDeAlteracao(null);
     }
 

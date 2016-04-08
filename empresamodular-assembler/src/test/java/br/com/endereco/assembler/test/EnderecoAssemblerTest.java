@@ -74,13 +74,4 @@ public class EnderecoAssemblerTest {
     public void deve_tratar_null_em_documentToEndereco() {
         assertNull(documentToEndereco(null));
     }
-
-    @Test
-    public void deve_tratar_null_em_tipoEndereco() {
-        Endereco endereco = new Endereco();
-        endereco.setTipoEndereco(null);
-        Document enderecoDoc = enderecoToDocument(endereco);
-        assertNull(documentToEndereco(enderecoDoc));
-    }
-
 }

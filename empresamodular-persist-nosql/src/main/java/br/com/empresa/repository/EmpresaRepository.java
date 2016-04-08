@@ -102,8 +102,9 @@ public class EmpresaRepository {
      */
     public void updateEmpresaPorCnpj(String cnpjFiltro, Empresa empresa) {
         try {
-            validateCnpj(cnpjFiltro);
+            checkNotNull(cnpjFiltro, "cnpjFiltro não pode ser null.");
             checkNotNull(empresa, "A empresa não pode ser null.");
+            validateCnpj(cnpjFiltro);
             MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
             collection.updateOne(new Document("_id", cnpjFiltro), new Document("$set", updateToDocumentFilter(empresa)));
         } finally {
@@ -153,6 +154,7 @@ public class EmpresaRepository {
      */
     public void removeEmpresaPorCnpj(String cnpjFiltro) {
         try {
+            checkNotNull(cnpjFiltro, "cnpjFiltro não pode ser null.");
             validateCnpj(cnpjFiltro);
             MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
             collection.deleteOne(new Document("_id", cnpjFiltro));
@@ -199,6 +201,7 @@ public class EmpresaRepository {
      */
     public List<Empresa> buscaEmpresaPorCnpj(String cnpjFiltro) {
         try {
+            checkNotNull(cnpjFiltro, "cnpjFiltro não pode ser null.");
             validateCnpj(cnpjFiltro);
             this.collection = getDb(connectDb(), this.db).getCollection(COLLECTION).find(new Document("_id", cnpjFiltro));
             return iterateCollection(this.collection);
