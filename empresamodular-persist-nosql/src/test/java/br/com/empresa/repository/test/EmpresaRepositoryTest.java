@@ -18,6 +18,13 @@
  *****************************************************************************/
 package br.com.empresa.repository.test;
 
+import static br.com.six2six.fixturefactory.Fixture.from;
+import static br.com.six2six.fixturefactory.loader.FixtureFactoryLoader.loadTemplates;
+import static java.lang.System.out;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.rules.ExpectedException.none;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,13 +37,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runners.MethodSorters;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import br.com.contmatic.empresawilliam.Empresa;
 import br.com.empresa.repository.EmpresaRepository;
-import br.com.six2six.fixturefactory.Fixture;
-import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
 /**
  * The Class EmpresaRepositoryTest.
@@ -53,17 +55,17 @@ public class EmpresaRepositoryTest {
     private String cnpjFiltro;
 
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public ExpectedException thrown = none();
 
     @BeforeClass
     public static void setUpBeforeClass() {
-        FixtureFactoryLoader.loadTemplates("br.com.contmatic.empresawilliam.templates");
+        loadTemplates("br.com.contmatic.empresawilliam.templates");
     }
 
     @Before
     public void setUp() {
-        empresa = Fixture.from(Empresa.class).gimme("empresa_valida");
-        empresaUpdate = Fixture.from(Empresa.class).gimme("empresa_valida");
+        empresa = from(Empresa.class).gimme("empresa_valida");
+        empresaUpdate = from(Empresa.class).gimme("empresa_valida");
         repository = new EmpresaRepository("localhost", 27017, "empresa");
         cnpjFiltro = empresa.getCnpj();
     }
@@ -154,7 +156,7 @@ public class EmpresaRepositoryTest {
     // Find===================================================================================================================
     @Test
     public void deve_buscar_empresa_por_cnpj() {
-        System.out.println(this.repository.buscaEmpresaPorCnpj("61377991000110"));
+        out.println(this.repository.buscaEmpresaPorCnpj("61377991000110"));
     }
 
     @Test
@@ -162,7 +164,7 @@ public class EmpresaRepositoryTest {
         empresaFind = new Empresa();
         this.empresaFind.isPesquisa();
         this.empresaFind.setDataDeCriacao(LocalDate.parse("2016-03-30"));
-        System.out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
     @Test
@@ -171,14 +173,14 @@ public class EmpresaRepositoryTest {
         this.empresaFind.setProprietario("Fulano");
         this.empresaFind.setRazaoSocial("Unip");
         this.empresaFind.setEmail("eu@teste.com.br");
-        System.out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
     @Test
     public void deve_buscar_empresas_por_filtro() {
         empresaFind = new Empresa();
         this.empresaFind.setEmail("eu@teste.com.br");
-        System.out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
 
     @Test
@@ -186,7 +188,7 @@ public class EmpresaRepositoryTest {
         empresaFind = new Empresa();
         this.empresaFind.setProprietario("Alguém");
         this.empresaFind.setEmail("eu@teste.com.br");
-        System.out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
 
     @Test
@@ -194,7 +196,7 @@ public class EmpresaRepositoryTest {
         empresaFind = new Empresa();
         this.empresaFind.setProprietario("Alguém");
         this.empresaFind.setSite("teste.com.br");
-        System.out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
 
     @Test
@@ -202,7 +204,7 @@ public class EmpresaRepositoryTest {
         empresaFind = new Empresa();
         this.empresaFind.setEnderecos(empresa.getEnderecos());
         this.empresaFind.setTelefones(empresa.getTelefones());
-        System.out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
 
     @Test
@@ -210,7 +212,7 @@ public class EmpresaRepositoryTest {
         empresaFind = new Empresa();
         this.empresaFind.setProprietario("Alguém");
         this.empresaFind.setEnderecos(empresa.getEnderecos());
-        System.out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
 
     @Test
@@ -218,7 +220,7 @@ public class EmpresaRepositoryTest {
         empresaFind = new Empresa();
         this.empresaFind.setTelefones(empresa.getTelefones());
         this.empresaFind.setEmail("ciclano@teste.com.br");
-        System.out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
 
     @Test
@@ -226,7 +228,7 @@ public class EmpresaRepositoryTest {
         empresaFind = new Empresa();
         this.empresaFind.setRazaoSocial("Unip");
         this.empresaFind.setEmail("ciclano@teste.com.br");
-        System.out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
 
     @Test
@@ -235,7 +237,7 @@ public class EmpresaRepositoryTest {
         this.empresaFind.isPesquisa();
         this.empresaFind.setDataDeCriacao(LocalDate.parse("2016-03-30"));
         this.empresaFind.setRazaoSocial("Unip");
-        System.out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
 
     @Test
@@ -244,7 +246,7 @@ public class EmpresaRepositoryTest {
         this.empresaFind.isPesquisa();
         this.empresaFind.setDataDeCriacao(LocalDate.parse("2016-03-30"));
         this.empresaFind.setProprietario("Alguém");
-        System.out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
 
     @Test
@@ -252,7 +254,7 @@ public class EmpresaRepositoryTest {
         empresaFind = new Empresa();
         this.empresaFind.setSite("teste.com.br");
         this.empresaFind.setEmail("eu@teste.com.br");
-        System.out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
 
     @Test
@@ -261,7 +263,7 @@ public class EmpresaRepositoryTest {
         this.empresaFind.setProprietario("Fulano");
         this.empresaFind.setEmail("eu@teste.com.br");
         this.empresaFind.setEnderecos(empresa.getEnderecos());
-        System.out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
     @Test
@@ -270,7 +272,7 @@ public class EmpresaRepositoryTest {
         this.empresaFind.setProprietario("Fulano");
         this.empresaFind.setEnderecos(empresa.getEnderecos());
         this.empresaFind.setTelefones(empresa.getTelefones());
-        System.out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
     @Test
@@ -279,7 +281,7 @@ public class EmpresaRepositoryTest {
         this.empresaFind.setProprietario("Fulano");
         this.empresaFind.setEnderecos(empresa.getEnderecos());
         this.empresaFind.setRazaoSocial(empresa.getRazaoSocial());
-        System.out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
     @Test
@@ -288,7 +290,7 @@ public class EmpresaRepositoryTest {
         this.empresaFind.setEnderecos(empresa.getEnderecos());
         this.empresaFind.setTelefones(empresa.getTelefones());
         this.empresaFind.setRazaoSocial(empresa.getRazaoSocial());
-        System.out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
     @Test
@@ -297,7 +299,7 @@ public class EmpresaRepositoryTest {
         this.empresaFind.setEnderecos(empresa.getEnderecos());
         this.empresaFind.setTelefones(empresa.getTelefones());
         this.empresaFind.setEmail("eu@teste.com.br");
-        System.out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
     @Test
@@ -307,7 +309,7 @@ public class EmpresaRepositoryTest {
         this.empresaFind.setRazaoSocial(empresa.getRazaoSocial());
         this.empresaFind.setSite("teste.com.br");
         this.empresaFind.setEmail("eu@teste.com.br");
-        System.out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
     @Test
@@ -317,18 +319,18 @@ public class EmpresaRepositoryTest {
         this.empresaFind.setRazaoSocial(empresa.getRazaoSocial());
         this.empresaFind.setEnderecos(empresa.getEnderecos());
         this.empresaFind.setTelefones(empresa.getTelefones());
-        System.out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
+        out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
     @Test
     public void deve_buscar_empresa_por_todos_os_campos() {
-        System.out.println(this.repository.buscaEmpresaPorFiltro(empresa));
+        out.println(this.repository.buscaEmpresaPorFiltro(empresa));
     }
 
     // Paging===================================================================================================================
     @Test
     public void deve_paginar_busca_de_empresas() {
-        System.out.println(this.repository.buscasPaginadas(2, 2));
+        out.println(this.repository.buscasPaginadas(2, 2));
     }
 
     @Test
@@ -358,21 +360,30 @@ public class EmpresaRepositoryTest {
 
     // Null======================================================================================================================
     @Test
-    public void deve_buscar_empresa_e_retornar_null() {
+    public void deve_tratar_nullPointer_para_filtro_nulo() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("O filtro não pode ser null.");
-        System.out.println(this.repository.buscaEmpresaPorFiltro(null));
+        out.println(this.repository.buscaEmpresaPorFiltro(null));
     }
 
     @Test
-    public void deve_retornar_null_para_resultado() {
+    public void deve_tratar_nullPointer_para_empresa_filtro() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("O filtro não pode ser null.");
+        this.repository.updateEmpresaPorFiltro(this.empresaFind, this.empresa);
+    }
+
+    @Test
+    public void deve_tratar_nullPointer_para_empresa_nova() {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("A empresa nova não pode ser null.");
+        empresaFind = new Empresa();
+        this.empresaFind.setProprietario("Fulano");
         this.repository.updateEmpresaPorFiltro(this.empresaFind, null);
     }
 
     @Test
-    public void deve_retornar_null_para_busca_por_cnpj() {
-        System.out.println(this.repository.buscaEmpresaPorCnpj(null));
+    public void deve_retornar_empresa_vazia_para_busca_por_cnpj_nulo() {
+        out.println(this.repository.buscaEmpresaPorCnpj(null));
     }
 }

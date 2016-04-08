@@ -18,7 +18,7 @@
  *****************************************************************************/
 package br.com.contmatic.empresawilliam.templates;
 
-import org.joda.time.LocalDate;
+import static org.joda.time.LocalDate.now;
 
 import br.com.contmatic.empresawilliam.Empresa;
 import br.com.contmatic.empresawilliam.Endereco;
@@ -50,8 +50,8 @@ public class EmpresaTemplate implements TemplateLoader {
                 add("site", random("teste.com.br", "exemplo.com.br"));
                 add("enderecos", has(2).of(Endereco.class, "endereco_valido"));
                 add("telefones", has(2).of(Telefone.class, "fixo_valido", "celular_valido"));
-                add("dataDeCriacao", random(LocalDate.now()));
-                add("dataDeAlteracao", random(LocalDate.now().plusDays(300)));
+                add("dataDeCriacao", random(now()));
+                add("dataDeAlteracao", random(now().plusDays(300)));
             }
         });
 
@@ -62,8 +62,8 @@ public class EmpresaTemplate implements TemplateLoader {
                 add("site", random("teste.com", "exemplocom", ".teste.com.br", "exemplo.br.com"));
                 add("enderecos", has(1).of(Endereco.class, "endereco_invalido"));
                 add("telefones", has(1).of(Telefone.class, "fixo_invalido"));
-                add("dataDeCriacao", random(LocalDate.now().minusDays(300)));
-                add("dataDeAlteracao", random(LocalDate.now()));
+                add("dataDeCriacao", random(now().minusDays(300)));
+                add("dataDeAlteracao", random(now()));
             }
         });
     }

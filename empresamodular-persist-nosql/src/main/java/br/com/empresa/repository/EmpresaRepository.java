@@ -121,7 +121,7 @@ public class EmpresaRepository {
     public void updateEmpresaPorFiltro(Empresa empresaFiltro, Empresa empresa) {
         try {
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
-            checkNotNull(empresa, "A empresa não pode ser null.");
+            checkNotNull(empresa, "A empresa nova não pode ser null.");
             MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
             collection.updateOne(findToDocumentFilter(empresaFiltro), new Document("$set", updateToDocumentFilter(empresa)));
         } finally {

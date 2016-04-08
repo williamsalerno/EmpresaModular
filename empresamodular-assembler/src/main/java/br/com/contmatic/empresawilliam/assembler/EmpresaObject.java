@@ -20,6 +20,7 @@ package br.com.contmatic.empresawilliam.assembler;
 
 import static br.com.contmatic.empresawilliam.assembler.EnderecoAssembler.toEndereco;
 import static br.com.contmatic.empresawilliam.assembler.TelefoneAssembler.toTelefone;
+import static org.joda.time.LocalDate.fromDateFields;
 
 import java.util.Date;
 import java.util.List;
@@ -54,7 +55,7 @@ public class EmpresaObject {
         if (document != null) {
             Date date = document.getDate(key);
             if (date != null) {
-                return LocalDate.fromDateFields(date);
+                return fromDateFields(date);
             }
         }
         return null;

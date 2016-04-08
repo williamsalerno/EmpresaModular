@@ -18,6 +18,9 @@
  *****************************************************************************/
 package br.com.contmatic.empresawilliam.assembler;
 
+import static br.com.contmatic.empresawilliam.TelefoneType.CELULAR;
+import static br.com.contmatic.empresawilliam.TelefoneType.FIXO;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -47,10 +50,27 @@ public class TelefoneAssembler {
      * @param telefone the telefone
      * @return the document
      */
-    public static Document toDocument(Telefone telefone) {
+    public static Document telefoneToDocument(Telefone telefone) {
         if (telefone != null && telefone.getTipoTelefone() != null) {
             Document telefoneDoc = new Document("ddd", telefone.getDdd()).append("telefone", telefone.getTelefone()).append("tipoTelefone", telefone.getTipoTelefone().name());
             return telefoneDoc;
+        }
+        return null;
+    }
+
+    /**
+     * To document.
+     *
+     * @param telefones the telefones
+     * @return the list
+     */
+    public static List<Document> listaTelefonesToDocument(Set<Telefone> telefones) {
+        if (telefones != null) {
+            List<Document> lista = new ArrayList<Document>();
+            for(Telefone telefone : telefones) {
+                lista.add(telefoneToDocument(telefone));
+            }
+            return lista;
         }
         return null;
     }
@@ -68,23 +88,6 @@ public class TelefoneAssembler {
             telefone.setDdd(document.getInteger("ddd"));
             telefone.setTipoTelefone(tipoTelefone(document));
             return telefone;
-        }
-        return null;
-    }
-
-    /**
-     * To document.
-     *
-     * @param telefones the telefones
-     * @return the list
-     */
-    public static List<Document> telefoneToDocument(Set<Telefone> telefones) {
-        if (telefones != null) {
-            List<Document> lista = new ArrayList<Document>();
-            for(Telefone telefone : telefones) {
-                lista.add(toDocument(telefone));
-            }
-            return lista;
         }
         return null;
     }
@@ -112,15 +115,14 @@ public class TelefoneAssembler {
      * @param doc the doc
      * @return the telefone type
      */
-    public static TelefoneType tipoTelefone(Document doc) {
-        if (doc != null) {
-            if (doc.get("tipoTelefone").equals(TelefoneType.CELULAR.name())) {
-                return TelefoneType.CELULAR;
+    private static TelefoneType tipoTelefone(Document document) {
+        if (document != null) {
+            if (document.get("tipoTelefone").equals(CELULAR.name())) {
+                return CELULAR;
             } else {
-                return TelefoneType.FIXO;
+                return FIXO;
             }
         }
         return null;
-
     }
 }

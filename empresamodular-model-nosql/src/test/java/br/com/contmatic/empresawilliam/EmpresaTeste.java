@@ -19,9 +19,16 @@
 package br.com.contmatic.empresawilliam;
 
 import static br.com.contmatic.empresawilliam.util.ValidationUtil.hasErrors;
+import static br.com.six2six.fixturefactory.Fixture.from;
+import static br.com.six2six.fixturefactory.loader.FixtureFactoryLoader.loadTemplates;
+import static java.lang.System.out;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.joda.time.LocalDate.now;
 import static org.junit.Assert.assertTrue;
+import static org.junit.rules.ExpectedException.none;
+import static org.junit.rules.Timeout.seconds;
+import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
@@ -33,17 +40,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.Timeout;
-import org.junit.runners.MethodSorters;
-
-import br.com.six2six.fixturefactory.Fixture;
-import br.com.six2six.fixturefactory.loader.FixtureFactoryLoader;
 
 /**
  * The Class EmpresaTeste.
  *
  * @author William
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class EmpresaTeste {
 
     /** The empresa. */
@@ -57,17 +60,17 @@ public class EmpresaTeste {
 
     /** The thrown. */
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public ExpectedException thrown = none();
 
     /** The global timeout. */
-    public Timeout globalTimeout = Timeout.seconds(1);
+    public Timeout globalTimeout = seconds(1);
 
     /**
      * Set up before class.
      */
     @BeforeClass
     public static void setUpBeforeClass() {
-        FixtureFactoryLoader.loadTemplates("br.com.contmatic.empresawilliam.templates");
+        loadTemplates("br.com.contmatic.empresawilliam.templates");
     }
 
     /**
@@ -75,9 +78,9 @@ public class EmpresaTeste {
      */
     @Before
     public void setUp() {
-        this.empresa = Fixture.from(Empresa.class).gimme("empresa_valida");
-        this.empresaInvalida = Fixture.from(Empresa.class).gimme("empresa_invalida");
-        this.dataTesteOntem = LocalDate.now().minusDays(1);
+        this.empresa = from(Empresa.class).gimme("empresa_valida");
+        this.empresaInvalida = from(Empresa.class).gimme("empresa_invalida");
+        this.dataTesteOntem = now().minusDays(1);
     }
 
     /**
@@ -93,7 +96,7 @@ public class EmpresaTeste {
      */
     @AfterClass
     public static void tearDownAfterClass() {
-        System.out.println("Teste de Empresa terminado.");
+        out.println("Teste de Empresa terminado.");
     }
 
     // Testes
@@ -104,7 +107,7 @@ public class EmpresaTeste {
     @Test
     public void deve_aceitar_cnpj_valido() {
         assertThat(hasErrors(empresa, null), is(false));
-        System.out.println(empresa.getCnpj());
+        out.println(empresa.getCnpj());
     }
 
     /**
@@ -479,7 +482,7 @@ public class EmpresaTeste {
     public void nao_deve_aceitar_dataCriacao_posterior() {
         thrown.expect(IllegalStateException.class);
         thrown.expectMessage("Data de criação informada não pode ser posterior à data atual.");
-        empresa.setDataDeCriacao(LocalDate.now().plusDays(1));
+        empresa.setDataDeCriacao(now().plusDays(1));
     }
 
     /**
@@ -526,7 +529,7 @@ public class EmpresaTeste {
     @Test
     public void deve_aceitar_empresa_nulo() {
         empresa = new Empresa();
-        System.out.println(empresa);
+        out.println(empresa);
     }
 
     /**
@@ -534,7 +537,7 @@ public class EmpresaTeste {
      */
     @Test
     public void nao_deve_aceitar_empresa_nulo() {
-        System.out.println(empresa);
+        out.println(empresa);
     }
 
 }

@@ -18,8 +18,8 @@
  *****************************************************************************/
 package br.com.contmatic.empresawilliam.assembler;
 
-import static br.com.contmatic.empresawilliam.assembler.EnderecoAssembler.enderecoToDocument;
-import static br.com.contmatic.empresawilliam.assembler.TelefoneAssembler.telefoneToDocument;
+import static br.com.contmatic.empresawilliam.assembler.EnderecoAssembler.listaEnderecosToDocument;
+import static br.com.contmatic.empresawilliam.assembler.TelefoneAssembler.listaTelefonesToDocument;
 
 import java.util.Date;
 
@@ -70,8 +70,8 @@ public final class EmpresaAssembler {
             .append("proprietario", empresa.getProprietario())
             .append("email", empresa.getEmail())
             .append("site", empresa.getSite())
-            .append("enderecos", enderecoToDocument(empresa.getEnderecos()))
-            .append("telefones", telefoneToDocument(empresa.getTelefones()))
+            .append("enderecos", listaEnderecosToDocument(empresa.getEnderecos()))
+            .append("telefones", listaTelefonesToDocument(empresa.getTelefones()))
             .append("dataCriacao", dataCriacao)
             .append("dataAlteracao", dataAlteracao);
             return empresaDoc;
@@ -103,10 +103,10 @@ public final class EmpresaAssembler {
             empresaDoc.append("email", empresa.getEmail());
         }
         if (empresa.getEnderecos() != null) {
-            empresaDoc.append("enderecos", enderecoToDocument(empresa.getEnderecos()));
+            empresaDoc.append("enderecos", listaEnderecosToDocument(empresa.getEnderecos()));
         }
         if (empresa.getTelefones() != null) {
-            empresaDoc.append("telefones", telefoneToDocument(empresa.getTelefones()));
+            empresaDoc.append("telefones", listaTelefonesToDocument(empresa.getTelefones()));
         }
         if (empresa.getDataDeAlteracao() != null) {
             Date dataAlteracao = converteParaDate(empresa.getDataDeAlteracao());
@@ -142,10 +142,10 @@ public final class EmpresaAssembler {
             empresaDoc.append("email", empresa.getEmail());
         }
         if (empresa.getEnderecos() != null) {
-            empresaDoc.append("enderecos", enderecoToDocument(empresa.getEnderecos()));
+            empresaDoc.append("enderecos", listaEnderecosToDocument(empresa.getEnderecos()));
         }
         if (empresa.getTelefones() != null) {
-            empresaDoc.append("telefones", telefoneToDocument(empresa.getTelefones()));
+            empresaDoc.append("telefones", listaTelefonesToDocument(empresa.getTelefones()));
         }
         if (empresa.getDataDeCriacao() != null) {
             Date dataCriacao = converteParaDate(empresa.getDataDeCriacao());
