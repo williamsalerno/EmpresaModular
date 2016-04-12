@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.bson.Document;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -33,13 +32,9 @@ public class TelefoneAssemblerTest {
         loadTemplates("br.com.contmatic.empresawilliam.templates");
     }
 
-    @Before
-    public void setUp() {
-        empresa = from(Empresa.class).gimme("empresa_valida");
-    }
-
     @Test
     public void deve_retornar_empresa_telefones_igual_a_doc_telefones() {
+        empresa = from(Empresa.class).gimme("empresa_valida");
         telefones = new HashSet<Telefone>();
         telefones.addAll(empresa.getTelefones());
         Iterator<Telefone> itrEnd = telefones.iterator();

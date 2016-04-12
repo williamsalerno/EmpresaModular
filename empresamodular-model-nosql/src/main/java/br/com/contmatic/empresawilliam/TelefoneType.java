@@ -25,10 +25,10 @@ package br.com.contmatic.empresawilliam;
  */
 public enum TelefoneType {
 
-                          /** The celular. */
-                          CELULAR("Celular", 9),
-                          /** The fixo. */
-                          FIXO("Fixo", 8);
+    /** The celular. */
+    CELULAR("Celular", 9),
+    /** The fixo. */
+    FIXO("Fixo", 8);
 
     /** The descricao. */
     private String descricao;

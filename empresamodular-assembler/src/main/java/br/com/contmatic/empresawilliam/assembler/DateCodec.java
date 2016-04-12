@@ -18,7 +18,9 @@
  *****************************************************************************/
 package br.com.contmatic.empresawilliam.assembler;
 
-import java.time.Instant;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.time.Instant.ofEpochMilli;
+
 import java.util.Date;
 
 import org.bson.BsonReader;
@@ -40,6 +42,9 @@ public class DateCodec implements Codec<Date> {
      * @see org.bson.codecs.Encoder#encode(org.bson.BsonWriter, java.lang.Object, org.bson.codecs.EncoderContext)
      */
     public void encode(BsonWriter writer, Date value, EncoderContext encoderContext) {
+        checkNotNull(writer, "Este método é utilitário, não deve ser invocado e nem deve receber valor null.");
+        checkNotNull(value, "Este método é utilitário, não deve ser invocado e nem deve receber valor null.");
+        checkNotNull(encoderContext, "Este método é utilitário, não deve ser invocado e nem deve receber valor null.");
         writer.writeDateTime(value.getTime());
     }
 
@@ -58,7 +63,9 @@ public class DateCodec implements Codec<Date> {
      * @see org.bson.codecs.Decoder#decode(org.bson.BsonReader, org.bson.codecs.DecoderContext)
      */
     public Date decode(BsonReader reader, DecoderContext decoderContext) {
-        return Date.from(Instant.ofEpochMilli(reader.readDateTime()));
+        checkNotNull(reader, "Este método é utilitário, não deve ser invocado e nem deve receber valor null.");
+        checkNotNull(decoderContext, "Este método é utilitário, não deve ser invocado e nem deve receber valor null.");
+        return Date.from(ofEpochMilli(reader.readDateTime()));
     }
 
 }

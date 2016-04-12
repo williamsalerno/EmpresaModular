@@ -28,10 +28,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 
 import org.bson.Document;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import br.com.contmatic.empresawilliam.Empresa;
@@ -41,6 +43,7 @@ import br.com.contmatic.empresawilliam.Empresa;
  *
  * @author William
  */
+@FixMethodOrder(NAME_ASCENDING)
 public class EmpresaAssemblerTest {
 
     private Empresa empresa;

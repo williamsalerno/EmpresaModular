@@ -1,3 +1,21 @@
+/******************************************************************************
+ * Produto: Gestor de Empresas                                                *
+ * Contmatic Phoenix © Desde 1986                                             *
+ * Tecnologia em Softwares de Gestão Contábil, Empresarial e ERP              *
+ * Todos os direitos reservados.                                              *
+ *                                                                            *
+ *                                                                            *
+ *    Histórico:                                                              *
+ *          Data        Programador              Tarefa                       *
+ *          ----------  -----------------        -----------------------------*
+ *   Autor  12/04/2016  william.salerno          Classe criada.        	      *
+ *                                                                            *
+ *   Comentários:                                                             *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *                                                                            *
+ *****************************************************************************/
 package br.com.endereco.assembler.test;
 
 import static br.com.contmatic.empresawilliam.assembler.EnderecoAssembler.documentToEndereco;
@@ -8,6 +26,7 @@ import static br.com.six2six.fixturefactory.Fixture.from;
 import static br.com.six2six.fixturefactory.loader.FixtureFactoryLoader.loadTemplates;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,12 +36,20 @@ import java.util.Set;
 import org.bson.Document;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import br.com.contmatic.empresawilliam.Empresa;
 import br.com.contmatic.empresawilliam.Endereco;
 
+/**
+ * The Class EnderecoAssemblerTest.
+ *
+ * @author William
+ */
+@FixMethodOrder(NAME_ASCENDING)
 public class EnderecoAssemblerTest {
+
     private Empresa empresa;
     private Set<Endereco> enderecos;
     private List<Document> enderecosDoc;

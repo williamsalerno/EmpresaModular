@@ -21,21 +21,21 @@ package br.com.empresa.repository.test;
 import static br.com.six2six.fixturefactory.Fixture.from;
 import static br.com.six2six.fixturefactory.loader.FixtureFactoryLoader.loadTemplates;
 import static java.lang.System.out;
+import static org.joda.time.LocalDate.parse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.rules.ExpectedException.none;
+import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runners.MethodSorters;
 
 import br.com.contmatic.empresawilliam.Empresa;
 import br.com.empresa.repository.EmpresaRepository;
@@ -45,7 +45,7 @@ import br.com.empresa.repository.EmpresaRepository;
  *
  * @author William
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(NAME_ASCENDING)
 public class EmpresaRepositoryTest {
 
     private Empresa empresa;
@@ -71,7 +71,7 @@ public class EmpresaRepositoryTest {
     }
 
     // Save====================================================================================================================
-    @Test()
+    @Test
     public void deve_incluir_empresa_uma_vez() {
         this.repository.saveEmpresa(this.empresa);
     }
@@ -163,7 +163,7 @@ public class EmpresaRepositoryTest {
     public void deve_buscar_empresa_por_filtro() {
         empresaFind = new Empresa();
         this.empresaFind.isPesquisa();
-        this.empresaFind.setDataDeCriacao(LocalDate.parse("2016-03-30"));
+        this.empresaFind.setDataDeCriacao(parse("2016-03-30"));
         out.println(this.repository.buscaEmpresaPorFiltro(empresaFind));
     }
 
@@ -235,7 +235,7 @@ public class EmpresaRepositoryTest {
     public void deve_buscar_empresas_por_data_de_criacao_e_razaoSocial() {
         empresaFind = new Empresa();
         this.empresaFind.isPesquisa();
-        this.empresaFind.setDataDeCriacao(LocalDate.parse("2016-03-30"));
+        this.empresaFind.setDataDeCriacao(parse("2016-03-30"));
         this.empresaFind.setRazaoSocial("Unip");
         out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
@@ -244,7 +244,7 @@ public class EmpresaRepositoryTest {
     public void deve_buscar_empresas_por_data_de_criacao_e_proprietario() {
         empresaFind = new Empresa();
         this.empresaFind.isPesquisa();
-        this.empresaFind.setDataDeCriacao(LocalDate.parse("2016-03-30"));
+        this.empresaFind.setDataDeCriacao(parse("2016-03-30"));
         this.empresaFind.setProprietario("Alguém");
         out.println(this.repository.buscaEmpresasPorFiltro(empresaFind));
     }
@@ -380,10 +380,5 @@ public class EmpresaRepositoryTest {
         empresaFind = new Empresa();
         this.empresaFind.setProprietario("Fulano");
         this.repository.updateEmpresaPorFiltro(this.empresaFind, null);
-    }
-
-    @Test
-    public void deve_retornar_empresa_vazia_para_busca_por_cnpj_nulo() {
-        out.println(this.repository.buscaEmpresaPorCnpj(null));
     }
 }
