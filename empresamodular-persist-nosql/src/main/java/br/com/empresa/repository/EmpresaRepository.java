@@ -58,6 +58,8 @@ public class EmpresaRepository {
     /** The db. */
     private String db;
 
+    private MongoCollection<Document> mongoCollection;
+
     /** The Constant COLLECTION. */
     public static final String COLLECTION = "empresa";
 
@@ -74,6 +76,7 @@ public class EmpresaRepository {
         this.host = host;
         this.port = port;
         this.db = db;
+        this.mongoCollection = getDb(connectDb(), this.db).getCollection(COLLECTION);
     }
 
     /**
@@ -85,10 +88,7 @@ public class EmpresaRepository {
         try {
             checkNotNull(empresa, "A empresa não pode ser null.");
             checkArgument(!hasErrors(empresa), "Foi encontrado erro em Empresa.");
-            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
-            collection.insertOne(toDocument(empresa));
-        } catch (MongoWriteException e) {
-            throw new IllegalStateException("Empresa já existe.");
+            mongoCollection.insertOne(toDocument(empresa));
         } finally {
             connectDb().close();
         }
@@ -105,8 +105,7 @@ public class EmpresaRepository {
             checkNotNull(cnpjFiltro, "cnpjFiltro não pode ser null.");
             checkNotNull(empresa, "A empresa não pode ser null.");
             validateCnpj(cnpjFiltro);
-            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
-            collection.updateOne(new Document("_id", cnpjFiltro), new Document("$set", updateToDocumentFilter(empresa)));
+            mongoCollection.updateOne(new Document("_id", cnpjFiltro), new Document("$set", updateToDocumentFilter(empresa)));
         } finally {
             connectDb().close();
         }
@@ -123,8 +122,7 @@ public class EmpresaRepository {
         try {
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
             checkNotNull(empresa, "A empresa nova não pode ser null.");
-            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
-            collection.updateOne(findToDocumentFilter(empresaFiltro), new Document("$set", updateToDocumentFilter(empresa)));
+            mongoCollection.updateOne(findToDocumentFilter(empresaFiltro), new Document("$set", updateToDocumentFilter(empresa)));
         } finally {
             connectDb().close();
         }
@@ -140,8 +138,7 @@ public class EmpresaRepository {
         try {
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
             checkNotNull(empresa, "A empresa não pode ser null.");
-            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
-            collection.updateMany(findToDocumentFilter(empresaFiltro), new Document("$set", updateToDocumentFilter(empresa)));
+            mongoCollection.updateMany(findToDocumentFilter(empresaFiltro), new Document("$set", updateToDocumentFilter(empresa)));
         } finally {
             connectDb().close();
         }
@@ -156,8 +153,7 @@ public class EmpresaRepository {
         try {
             checkNotNull(cnpjFiltro, "cnpjFiltro não pode ser null.");
             validateCnpj(cnpjFiltro);
-            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
-            collection.deleteOne(new Document("_id", cnpjFiltro));
+            mongoCollection.deleteOne(new Document("_id", cnpjFiltro));
         } finally {
             connectDb().close();
         }
@@ -171,8 +167,7 @@ public class EmpresaRepository {
     public void removeEmpresaPorFiltro(Empresa empresaFiltro) {
         try {
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
-            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
-            collection.deleteOne(findToDocumentFilter(empresaFiltro));
+            mongoCollection.deleteOne(findToDocumentFilter(empresaFiltro));
         } finally {
             connectDb().close();
         }
@@ -186,8 +181,7 @@ public class EmpresaRepository {
     public void removeEmpresasPorFiltro(Empresa empresaFiltro) {
         try {
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
-            MongoCollection<Document> collection = getDb(connectDb(), this.db).getCollection(COLLECTION);
-            collection.deleteMany(findToDocumentFilter(empresaFiltro));
+            mongoCollection.deleteMany(findToDocumentFilter(empresaFiltro));
         } finally {
             connectDb().close();
         }
@@ -203,12 +197,11 @@ public class EmpresaRepository {
         try {
             checkNotNull(cnpjFiltro, "cnpjFiltro não pode ser null.");
             validateCnpj(cnpjFiltro);
-            this.collection = getDb(connectDb(), this.db).getCollection(COLLECTION).find(new Document("_id", cnpjFiltro));
+            this.collection = mongoCollection.find(new Document("_id", cnpjFiltro));
             return iterateCollection(this.collection);
         } finally {
             connectDb().close();
         }
-
     }
 
     /**
@@ -220,8 +213,7 @@ public class EmpresaRepository {
     public List<Empresa> buscaEmpresaPorFiltro(Empresa empresaFiltro) {
         try {
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
-            this.collection = getDb(connectDb(), this.db).getCollection(COLLECTION).find(updateToDocumentFilter(empresaFiltro)).projection(include(FieldsList(updateToDocumentFilter(empresaFiltro))))
-                    .limit(1);
+            this.collection = mongoCollection.find(updateToDocumentFilter(empresaFiltro)).projection(include(FieldsList(updateToDocumentFilter(empresaFiltro)))).limit(1);
             return iterateCollection(this.collection);
         } finally {
             connectDb().close();
@@ -237,7 +229,7 @@ public class EmpresaRepository {
     public List<Empresa> buscaEmpresasPorFiltro(Empresa empresaFiltro) {
         try {
             checkNotNull(empresaFiltro, "O filtro não pode ser null.");
-            this.collection = getDb(connectDb(), this.db).getCollection(COLLECTION).find(updateToDocumentFilter(empresaFiltro)).projection(include(FieldsList(updateToDocumentFilter(empresaFiltro))));
+            this.collection = mongoCollection.find(updateToDocumentFilter(empresaFiltro)).projection(include(FieldsList(updateToDocumentFilter(empresaFiltro))));
             return iterateCollection(this.collection);
         } finally {
             connectDb().close();
@@ -254,7 +246,7 @@ public class EmpresaRepository {
     public List<Empresa> buscasPaginadas(int numeroPagina, int elementosPorPagina) {
         try {
             checkArgument(elementosPorPagina != 0, "Elementos por página deve ser diferente de 0.");
-            this.collection = getDb(connectDb(), this.db).getCollection(COLLECTION).find().skip(elementosPorPagina * (numeroPagina - 1)).limit(elementosPorPagina).sort(new Document("_id", 1));
+            this.collection = mongoCollection.find().skip(elementosPorPagina * (numeroPagina - 1)).limit(elementosPorPagina).sort(new Document("_id", 1));
             return iterateCollection(this.collection);
         } finally {
             connectDb().close();

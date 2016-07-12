@@ -65,15 +65,4 @@ public class MongoClientDate {
         return option;
     }
 
-    // public static MongoClientOptions codecLocalDate() {
-    // Map<BsonType, Class<?>> replacements = new HashMap<BsonType, Class<?>>();
-    // replacements.put(BsonType.DATE_TIME, LocalDate.class);
-    // BsonTypeClassMap bsonTypeClassMap = new BsonTypeClassMap(replacements);
-    // DocumentCodecProvider documentCodecProvider = new DocumentCodecProvider(bsonTypeClassMap);
-    // CodecRegistry cr = CodecRegistries.fromRegistries(CodecRegistries.fromCodecs(new LocalDateCodec()), CodecRegistries.fromProviders(documentCodecProvider),
-    // MongoClient.getDefaultCodecRegistry());
-    // MongoClientOptions option = MongoClientOptions.builder().codecRegistry(cr).build();
-    // return option;
-    // }
-
 }

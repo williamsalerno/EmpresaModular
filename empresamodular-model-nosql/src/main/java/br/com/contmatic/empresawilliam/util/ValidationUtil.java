@@ -44,7 +44,7 @@ public final class ValidationUtil {
      * @return true, if successful
      */
     public static boolean hasErrors(Object obj, String message) {
-        if (message != null) {
+        if (message != null && obj != null) {
             ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
             Validator validator = factory.getValidator();
             Set<ConstraintViolation<Object>> errors = validator.validate(obj);
@@ -67,7 +67,7 @@ public final class ValidationUtil {
      * @return true, if successful
      */
     public static boolean hasErrors(Object obj, String message, Class<?>... groups) {
-        if (message != null) {
+        if (message != null && obj != null) {
             ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
             Validator validator = factory.getValidator();
             Set<ConstraintViolation<Object>> errors = validator.validate(obj, groups);

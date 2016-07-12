@@ -66,14 +66,21 @@ public class EmpresaRepositoryTest {
     public void setUp() {
         empresa = from(Empresa.class).gimme("empresa_valida");
         empresaUpdate = from(Empresa.class).gimme("empresa_valida");
-        repository = new EmpresaRepository("localhost", 27017, "empresa");
+        repository = new EmpresaRepository("localhost", 37017, "empresa");
         cnpjFiltro = empresa.getCnpj();
     }
 
     // Save====================================================================================================================
     @Test
     public void deve_incluir_empresa_uma_vez() {
-        this.repository.saveEmpresa(this.empresa);
+        for(int i = 0 ; i <= 1000000 ; i++) {
+            try {
+                empresa = from(Empresa.class).gimme("empresa_valida");
+                this.repository.saveEmpresa(this.empresa);
+            } catch (Exception e) {
+                continue;
+            }
+        }
     }
 
     // Update===================================================================================================================
